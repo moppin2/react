@@ -16,7 +16,7 @@ root.render(
       <div className="LoginInfo">
         <div>회원가입</div>
         <div>로그인</div>
-      </div>
+      </div> 
     </nav>
     <App />
   </React.StrictMode>
