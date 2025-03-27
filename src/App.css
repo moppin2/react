@@ -3,15 +3,25 @@ body{
   font-size: .80rem;
 }
 
+body a:link,
+body a:visited,
+body a:hover,
+body a:active {
+  text-decoration: none;
+  color: inherit;
+}
+
 p{
   margin: 0;
 }
 
-.App{
+.Nav{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 20px;
+  padding: 10px;
 }
 
 .Menu{  
@@ -19,7 +29,7 @@ p{
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  gap: 10px;
   padding: 0;
   margin: 0;
 }
@@ -33,5 +43,5 @@ p{
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  gap: .5rem;
+  gap: 10px;
 }

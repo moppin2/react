@@ -1,0 +1,17 @@
+.reserve-wrap{
+    margin: 10px;
+}
+.reserve-box{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px;
+}
+.course-select{
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    padding: 20px;
+    gap: 10px;
+}

@@ -1,25 +1,24 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Menu from "./menu/Menu.js";
 import Course from "./course/Course.js";
-import Home from "./Home.js";
+import ReserveClass from "./class/ReserveClass.js";
+import Home from "./home/Home.js";
+import Service from './service/Service.js';
+import Join from './join/Join.js';
+import Login from './login/Login.js';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
-    <Router>      
-      <nav className="App">
-        <div><Link to="/">logo</Link></div>
-        <ul className="Menu">
-          <li>서비스소개</li>
-          <li><Link to="/course">과정등록</Link></li>
-        </ul>
-        <div className="LoginInfo">
-          <div>회원가입</div>
-          <div>로그인</div>
-        </div> 
-      </nav>
+    <Router>              
+      <Menu />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/course" element={<Course />} />
+        <Route path="/class" element={<ReserveClass />} />
+        <Route path="/join" element={<Join />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/service" element={<Service />} />
       </Routes>
     </Router>
   );

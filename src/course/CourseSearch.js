@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import CheckboxGroup from "./CheckboxGroup.js";
-import './CheckboxGroup.css';
-
 function CourseSearch({ onSearch }) {
   const [selected, setSelected] = useState({
     협회: [],
@@ -26,7 +24,7 @@ function CourseSearch({ onSearch }) {
   };
 
   return (
-    <div>
+    <div className='course-search'>
       <CheckboxGroup title="협회" options={['PADI', 'AIDA']} onChange={handleChange} />
       <CheckboxGroup title="레벨" options={['1', '2', '3', '4']} onChange={handleChange} />
       <CheckboxGroup title="지역" options={['서울', '경기', '인천']} onChange={handleChange} />
