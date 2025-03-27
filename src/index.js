@@ -7,17 +7,6 @@ import reportWebVitals from './reportWebVitals';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <nav className="App">
-      <div>logo</div>
-      <ul className="Menu">
-        <li>서비스소개</li>
-        <li>과정등록</li>
-      </ul>
-      <div className="LoginInfo">
-        <div>회원가입</div>
-        <div>로그인</div>
-      </div> 
-    </nav>
     <App />
   </React.StrictMode>
 );
