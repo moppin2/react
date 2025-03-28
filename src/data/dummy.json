@@ -1,0 +1,51 @@
+{
+    "search": [
+        {
+        "title": "협회",
+        "value": ["PADI", "AIDA"]
+        },
+        {
+        "title": "레벨",
+        "value": [1, 2, 3, 4]
+        },
+        {
+        "title": "지역",
+        "value": ["서울", "경기", "인천"]
+        }
+    ],
+
+    "course": [
+        {
+        "courseid": "A",
+        "title": "PADI OPEN WATER",
+        "director": "홍길동"
+        },
+        {
+        "courseid": "B",
+        "title": "PADI ADVANCED",
+        "director": "둘리"
+        },
+        {
+        "courseid": "C",
+        "title": "AIDA 프리다이빙 체험",
+        "director": "김철수"
+        }
+    ],
+
+    "class": [
+        {
+        "courseid": "A",
+        "title": "기초 이론수업",
+        "place": "강동구 사무실",
+        "seats": 4,
+        "occupied": 3
+        },
+        {
+        "courseid": "B",
+        "title": "실습",
+        "place": "강동구 사무실",
+        "seats": 8,
+        "occupied": 7
+        }
+    ]
+}

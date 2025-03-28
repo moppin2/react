@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import CheckboxGroup from "./CheckboxGroup.js";
+import data from "../data/dummy.json"
+
 function CourseSearch({ onSearch }) {
   const [selected, setSelected] = useState({
     협회: [],
@@ -22,12 +24,12 @@ function CourseSearch({ onSearch }) {
   const handleSearchClick = () => {
     onSearch(selected); // 부모 컴포넌트(Course)로 전달
   };
-
+  
   return (
     <div className='course-search'>
-      <CheckboxGroup title="협회" options={['PADI', 'AIDA']} onChange={handleChange} />
-      <CheckboxGroup title="레벨" options={['1', '2', '3', '4']} onChange={handleChange} />
-      <CheckboxGroup title="지역" options={['서울', '경기', '인천']} onChange={handleChange} />
+      {data.search.map((item, index) => (
+        <CheckboxGroup title={item.title} options={item.value} onChange={handleChange} />
+      ))}
       <button onClick={handleSearchClick}>조회하기</button>
     </div>
   );
