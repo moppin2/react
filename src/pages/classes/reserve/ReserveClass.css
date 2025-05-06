@@ -1,12 +1,15 @@
-.reserve-wrap{
-    margin: 10px;
+.course-title{
+    margin: 0;
+    padding: 20px;
 }
 .reserve-box{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    margin: 10px;
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 500px;
 }
 .course-select{
     display: flex;

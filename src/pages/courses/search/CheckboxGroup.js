@@ -10,8 +10,8 @@ function CheckboxGroup({ title, options, onChange }) {
       <section>
         <p>{title}</p>
         <div className="checkbox-group">
-          {options.map((label, idx) => (
-            <label key={idx}>
+          {options.map((label, index) => (
+            <label key={index}>
               <input
                 type="checkbox"
                 value={label}

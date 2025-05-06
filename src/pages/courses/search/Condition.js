@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import CheckboxGroup from "./CheckboxGroup.js";
-import data from "../data/dummy.json"
+import data from "../../../assets/data/dummy.json"
 
-function CourseSearch({ onSearch }) {
-  const [selected, setSelected] = useState({
-    협회: [],
-    레벨: [],
-    지역: [],
-  });
+function Condition({ onSearch }) {
+  const [selected, setSelected] = useState(
+    data.search.reduce((acc, item) => {
+      acc[item.title] = [];
+      return acc;
+    }, {})
+  );
 
   const handleChange = (groupTitle, value, checked) => {
     setSelected((prev) => {
@@ -28,12 +29,12 @@ function CourseSearch({ onSearch }) {
   return (
     <div className='course-search'>
       {data.search.map((item, index) => (
-        <CheckboxGroup title={item.title} options={item.value} onChange={handleChange} />
+        <CheckboxGroup key={index} title={item.title} options={item.value} onChange={handleChange} />
       ))}
       <button onClick={handleSearchClick}>조회하기</button>
     </div>
   );
 }
 
-export default CourseSearch;
+export default Condition;
 
