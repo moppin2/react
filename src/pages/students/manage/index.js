@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-function StudentManage() {
-  const [results, setResults] = useState(null);
-
+function StudentManage() { 
   return (
     <div className='courseManage'>
         학생관리
     </div>
-  );
+  ); 
 }
 
 export default StudentManage;

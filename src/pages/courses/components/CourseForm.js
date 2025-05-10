@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../../services/api'; // Axios 인스턴스
+import ImageUploader from '../../../components/common/ImageUploader';
+import MultiImageUploader from '../../../components/common/MultiImageUploader';
 
 function CourseForm({ initialValues, onSubmit, loading = false }) {
   const [title, setTitle] = useState('');
@@ -9,14 +11,21 @@ function CourseForm({ initialValues, onSubmit, loading = false }) {
   const [curriculum, setCurriculum] = useState('');
   const [description, setDescription] = useState('');
   const [criteriaList, setCriteriaList] = useState([{ type: '', value: '' }]);
+  const [licenseId, setLicenseId] = useState('');
+  const [coverImageUrl, setCoverImageUrl] = useState('');
+  const [coverImageKey, setCoverImageKey] = useState('');
+  const [galleryImages, setGalleryImages] = useState([]);
+
 
   const [associationOptions, setAssociationOptions] = useState([]);
   const [levelOptions, setLevelOptions] = useState([]);
   const [regionOptions, setRegionOptions] = useState([]);
+  const [licenseOptions, setLicenseOptions] = useState([]);
 
   useEffect(() => {
     setTitle(initialValues?.title || '');
     setAssociationCode(initialValues?.association_code || '');
+    setLicenseId(initialValues?.license_id || '');
     setLevelCode(initialValues?.level_code || '');
     setRegionCode(initialValues?.region_code || '');
     setCurriculum(initialValues?.curriculum || '');
@@ -37,24 +46,62 @@ function CourseForm({ initialValues, onSubmit, loading = false }) {
       }
     })();
   }, []);
+  // 라이센스 옵션
+  useEffect(() => {
+    if (!associationCode) {
+      setLicenseOptions([]);
+      setLicenseId('');
+      return;
+    }
+    (async () => {
+      try {
+        const res = await api.get(`/api/licenses?association=${associationCode}`);
+        setLicenseOptions(res.data);
+      } catch (err) {
+        console.error('라이센스 불러오기 실패:', err);
+      }
+    })();
+  }, [associationCode]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!title.trim()) return alert('과정명을 입력하세요.');
     onSubmit({
       title,
-      association_code: associationCode,
+      license_id: licenseId,
       level_code: levelCode,
       region_code: regionCode,
       curriculum,
       description,
-      criteriaList
+      criteriaList,
+      file_keys: [coverImageKey, ...galleryImages.map(f => f.file_key)].filter(Boolean),
     });
   };
 
   return (
     <form onSubmit={handleSubmit} style={{ maxWidth: 600, margin: '0 auto' }}>
       <h2>과정 정보</h2>
+
+      <ImageUploader
+        label="대표 이미지"
+        purpose="thumbnail"
+        targetType="course"
+        targetId={null} // course 생성 전에는 null, 생성 후 업데이트 시 course.id
+        initialUrl={coverImageUrl}
+        isPublic={true}
+        onUploaded={(url, key) => {
+          setCoverImageUrl(url);
+          setCoverImageKey(key);
+        }}
+      />
+
+      <MultiImageUploader
+        purpose="gallery"
+        targetType="course"
+        targetId={null}
+        isPublic={true}
+        onUploadedFilesChange={(files) => setGalleryImages(files)} // [{file_key, url}]
+      />
 
       <div>
         <label>과정명</label>
@@ -67,6 +114,18 @@ function CourseForm({ initialValues, onSubmit, loading = false }) {
           <option value="">선택하세요</option>
           {associationOptions.map(opt => (
             <option key={opt.code} value={opt.code}>{opt.name}</option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label>라이센스</label>
+        <select value={licenseId} onChange={(e) => setLicenseId(e.target.value)} required>
+          <option value="">선택하세요</option>
+          {licenseOptions.map(opt => (
+            <option key={opt.id} value={opt.id}>
+              {opt.name}
+            </option>
           ))}
         </select>
       </div>
@@ -135,7 +194,7 @@ function CourseForm({ initialValues, onSubmit, loading = false }) {
       <hr />
       <button type="submit" disabled={loading}>
         {loading ? '저장 중...' : '저장'
-      }</button>
+        }</button>
     </form>
   );
 }

@@ -1,6 +1,5 @@
 import React, { useState, useParams, useEffect } from 'react';
-import { useAuth } from '../../../hooks/useAuth';
-import CourseForm from '../component/CourseForm';
+import CourseForm from '../components/CourseForm';
 import api from '../../../services/api';
 
 function CourseEdit() {
@@ -9,8 +8,8 @@ function CourseEdit() {
 
   useEffect(() => {
     (async () => {
-      const courseRes = await api.get(`/courses/${id}`);
-      const criteriaRes = await api.get(`/courses/${id}/completion-criteria`);
+      const courseRes = await api.get(`/course/${id}`);
+      const criteriaRes = await api.get(`/course/${id}/completion-criteria`);
       setCourseData({
         title: courseRes.data.title,
         description: courseRes.data.description,

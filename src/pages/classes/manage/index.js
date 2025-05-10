@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 function ClassManage() {
-  const [results, setResults] = useState(null);
-
   return (
     <div className='classManage'>
-        수업관리
+      수업관리
     </div>
   );
 }

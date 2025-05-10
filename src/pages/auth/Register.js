@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 import './Register.css';
 import api from '../../services/api';
 
 
 export default function Register() {
+  const navigate = useNavigate()
+  const { manualLogin } = useAuth()
+
+  const temp_pwd = 'Wkdrndi!1'; //짱구야!1
   const [userType, setUserType] = useState('user');
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    name: '',
-    phone: '',
-    careerYears: '',
+    email: 'test@test.com',
+    password: temp_pwd,
+    confirmPassword: temp_pwd,
+    name: '테스트유저',
+    phone: '01057312331',
+    careerYears: '5',
     majorCareer: '',
     introduction: ''
   });
@@ -42,7 +48,14 @@ export default function Register() {
   };
 
   const handleTypeChange = (e) => {
-    setUserType(e.target.value);
+    setUserType(e.target.value); 
+
+    //테스트용 자동입력
+    if (e.target.value === 'user') {
+      setFormData((prev) => ({ ...prev, name: '테스트유저' }));
+    } else {
+      setFormData((prev) => ({ ...prev, name: '테스트강사' }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -63,10 +76,10 @@ export default function Register() {
       const res = await api.post(endpoint, payload);
       if (res.status >= 200 && res.status < 300) {
         alert('가입 완료!');
-        setFormData({
-          email: '', password: '', confirmPassword: '', name: '', phone: '',
-          careerYears: '', majorCareer: '', introduction: ''
-        });
+        console.log(res.data);
+        manualLogin(res.data); // ✅ 로그인 상태 수동 갱신
+        navigate(userType === 'instructor' ? '/instructor/verify' : '/');
+
       } else {
         alert('가입 실패');
       }
