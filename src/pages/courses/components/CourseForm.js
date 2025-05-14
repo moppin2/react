@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../../services/api'; // Axios 인스턴스
+import api from '../../../services/api';
 import ImageUploader from '../../../components/common/ImageUploader';
 import MultiImageUploader from '../../../components/common/MultiImageUploader';
 
@@ -15,7 +15,7 @@ function CourseForm({ initialValues, onSubmit, loading = false }) {
   const [coverImageUrl, setCoverImageUrl] = useState('');
   const [coverImageKey, setCoverImageKey] = useState('');
   const [galleryImages, setGalleryImages] = useState([]);
-
+  const [isPublished, setIsPublished] = useState(false); // ✅ 공개 여부
 
   const [associationOptions, setAssociationOptions] = useState([]);
   const [levelOptions, setLevelOptions] = useState([]);
@@ -24,16 +24,19 @@ function CourseForm({ initialValues, onSubmit, loading = false }) {
 
   useEffect(() => {
     setTitle(initialValues?.title || '');
-    setAssociationCode(initialValues?.association_code || '');
+    setAssociationCode(initialValues?.license_association || '');
     setLicenseId(initialValues?.license_id || '');
     setLevelCode(initialValues?.level_code || '');
     setRegionCode(initialValues?.region_code || '');
     setCurriculum(initialValues?.curriculum || '');
     setDescription(initialValues?.description || '');
     setCriteriaList(initialValues?.criteriaList || [{ type: '', value: '' }]);
+    setCoverImageUrl(initialValues?.coverImageUrl || '');
+    setCoverImageKey(initialValues?.coverImageKey || '');
+    setGalleryImages(initialValues?.galleryImages || []);
+    setIsPublished(initialValues?.is_published ?? false); // ✅
   }, [initialValues]);
 
-  // 코드 옵션 불러오기
   useEffect(() => {
     (async () => {
       try {
@@ -46,7 +49,7 @@ function CourseForm({ initialValues, onSubmit, loading = false }) {
       }
     })();
   }, []);
-  // 라이센스 옵션
+
   useEffect(() => {
     if (!associationCode) {
       setLicenseOptions([]);
@@ -75,6 +78,7 @@ function CourseForm({ initialValues, onSubmit, loading = false }) {
       description,
       criteriaList,
       file_keys: [coverImageKey, ...galleryImages.map(f => f.file_key)].filter(Boolean),
+      is_published: isPublished, // ✅ 포함
     });
   };
 
@@ -86,7 +90,7 @@ function CourseForm({ initialValues, onSubmit, loading = false }) {
         label="대표 이미지"
         purpose="thumbnail"
         targetType="course"
-        targetId={null} // course 생성 전에는 null, 생성 후 업데이트 시 course.id
+        targetId={initialValues?.id}
         initialUrl={coverImageUrl}
         isPublic={true}
         onUploaded={(url, key) => {
@@ -98,9 +102,10 @@ function CourseForm({ initialValues, onSubmit, loading = false }) {
       <MultiImageUploader
         purpose="gallery"
         targetType="course"
-        targetId={null}
+        targetId={initialValues?.id}
         isPublic={true}
-        onUploadedFilesChange={(files) => setGalleryImages(files)} // [{file_key, url}]
+        initialFiles={galleryImages}
+        onUploadedFilesChange={(files) => setGalleryImages(files)}
       />
 
       <div>
@@ -123,9 +128,7 @@ function CourseForm({ initialValues, onSubmit, loading = false }) {
         <select value={licenseId} onChange={(e) => setLicenseId(e.target.value)} required>
           <option value="">선택하세요</option>
           {licenseOptions.map(opt => (
-            <option key={opt.id} value={opt.id}>
-              {opt.name}
-            </option>
+            <option key={opt.id} value={opt.id}>{opt.name}</option>
           ))}
         </select>
       </div>
@@ -192,12 +195,22 @@ function CourseForm({ initialValues, onSubmit, loading = false }) {
       <button type="button" onClick={() => setCriteriaList([...criteriaList, { type: '', value: '' }])}>+ 기준 추가</button>
 
       <hr />
+      <div>
+        <label>
+          <input
+            type="checkbox"
+            checked={isPublished}
+            onChange={(e) => setIsPublished(e.target.checked)}
+          />
+          &nbsp;공개
+        </label>
+      </div>
+
       <button type="submit" disabled={loading}>
-        {loading ? '저장 중...' : '저장'
-        }</button>
+        {loading ? '저장 중...' : '저장'}
+      </button>
     </form>
   );
 }
 
 export default CourseForm;
-

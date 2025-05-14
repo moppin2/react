@@ -2,16 +2,29 @@ import { Link } from "react-router-dom";
 import data from "../assets/data/dummy.json";
 import React from 'react';
 import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
+
+const getUserLabel = (userType) => {
+  switch (userType) {
+    case 'admin':
+      return ' (관리자)';
+    case 'instructor':
+      return ' (강사회원)';
+    default:
+      return ' (일반회원)';
+  }
+};
 
 function Menu() {
 
   const { user, loading, logout } = useAuth()
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
       await logout();
       // 로그아웃 성공하면 리다이렉트 or 상태 초기화
-      window.location.href = '/login'; // 로그인 페이지로 보내기
+      navigate('/login');
     } catch (error) {
       console.error('Logout failed', error);
     }
@@ -37,7 +50,8 @@ function Menu() {
         {
           user ?
             <div className="LoginInfo">
-              <div>{user.username}님{user.userType === 'user' ? ' (일반회원)' : ' (강사회원)'}</div>
+              <div>{user.username}님 {getUserLabel(user.userType)}
+              </div>
               <div><button onClick={handleLogout}>로그아웃</button></div>
             </div>
             :

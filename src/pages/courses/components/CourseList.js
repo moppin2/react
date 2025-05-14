@@ -38,7 +38,9 @@ export default function CourseList({ courses = [], type = 'default' }) {
                         <div className="course-actions">
                             <button>채팅</button>&nbsp;
                             <button>수업관리</button>&nbsp;
-                            <button>수정</button>
+                            <Link to={`/course/edit/${course.id}`}>
+                                <button>수정</button>
+                            </Link>
                         </div>
                     )}
                 </div>

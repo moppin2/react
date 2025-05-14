@@ -82,6 +82,13 @@
             "link": "/class/reserve",
             "type": "user",
             "active": true
+        },
+        {
+            "id": "admin",
+            "name": "관리자메뉴",
+            "link": "/admin",
+            "type": "admin",
+            "active": true
         }
     ],
 

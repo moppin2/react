@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import api from '../../services/api';
 import { resizeImage } from '../../utils/image';
 
@@ -14,6 +14,10 @@ export default function MultiImageUploader({
   const inputRef = useRef();
   const [files, setFiles] = useState(initialFiles);
   const [uploading, setUploading] = useState(false);
+
+  useEffect(() => {
+  setFiles(initialFiles);
+}, [initialFiles]);
 
   const handleFileChange = async (e) => {
     const selectedFiles = Array.from(e.target.files);
