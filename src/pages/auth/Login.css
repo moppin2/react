@@ -1,50 +1,79 @@
+/* Login Form styling */
+.login-form {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #FFFFFF;
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
 
-  .login-form {
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #ccc;       /* 테두리 두께 및 색 */
-    border-radius: 10px;           /* 둥근 모서리 */
-    font-family: sans-serif;
-    background-color: #fff;
-    box-sizing: border-box;
-  }
-  
-  .login-form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  
-  .login-form h2 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  
-  .form-group input {
-    padding: 8px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  button[type="submit"] {
-    padding: 10px;
-    font-size: 16px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  button[type="submit"]:hover {
-    background-color: #0056b3;
-  }
-  
-  
+.login-form h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.login-form .user-type {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.login-form .user-type label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
+  color: #555555;
+  font-size: 0.95rem;
+}
+
+.login-form .user-type input {
+  accent-color: #3d40da;
+}
+
+.login-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.login-form .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555555;
+}
+
+.login-form button {
+  width: 100%;
+}
+
+/* prevent heading/label wrapping */
+.login-form h2,
+.login-form .form-group label,
+.login-form .user-type label {
+  white-space: nowrap;
+}
+
+/* ensure full-width & proper box-sizing */
+.login-form *,
+.login-form input,
+.login-form textarea,
+.login-form select {
+  box-sizing: border-box;
+}
+
+/* inputs stretch exactly to form width */
+.login-form input,
+.login-form textarea,
+.login-form select {
+  width: 100%;
+}
+
+/* center radio buttons and labels */
+.login-form .user-type {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}

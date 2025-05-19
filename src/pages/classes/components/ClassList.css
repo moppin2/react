@@ -1,0 +1,105 @@
+/* File: src/pages/InstructorClassList.css */
+
+.class-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+  /* padding: 1rem; */
+}
+
+.class-list .class-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.class-list .class-title {
+  font-size: 1.25rem;
+  color: #333;
+  margin: 0.5rem 0;
+}
+
+.class-list .class-datetime,
+.class-list .class-meta {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 0.25rem;
+}
+
+.class-list .highlight {
+  color: #3d40da;
+  font-weight: 600;
+}
+
+.class-list .error {
+  color: #e74c3c;
+  text-align: center;
+}
+
+.class-list .class-status {
+  display: flex;
+  /* ① Flexbox 활성화 */
+  align-items: center;
+  /* ② 세로(교차축) 가운데 정렬 */
+}
+
+/* 과정명 한 줄 고정 + 말줄임표 처리 */
+.class-list .course-title {
+  display: block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.class-list .status-badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-right: 0.5rem;
+  border: 1px solid currentColor;
+}
+
+.class-list .status-reserved_open {
+  background: #f0f8ff;
+  color: #0066cc;
+}
+
+.class-list .status-reserved_closed {
+  background: #ffecec;
+  color: #cc0000;
+}
+
+.class-list .status-in_progress {
+  background: #e7f7e7;
+  color: #009900;
+}
+
+.class-list .status-awaiting_feedback {
+  background: #fff4e5;
+  color: #ff8800;
+}
+
+.class-list .status-completed {
+  background: #e8eaf6;
+  color: #3f51b5;
+}
+
+.class-list .course-info {
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background-color: #f5f5f5;
+  border-radius: 6px;
+}
+
+.class-list .course-info-top {
+  display: flex;
+  align-items: center;
+  /* padding: 0.5rem;
+  background-color: #f5f5f5;
+  border-radius: 6px; */
+}

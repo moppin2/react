@@ -1,0 +1,16 @@
+/* react-datepicker 내 day 셀 색상 커스터마이징 */
+.react-datepicker__day.rdp-day-sunday {
+    color: #e74c3c;
+    /* 빨간색 */
+}
+
+.react-datepicker__day.rdp-day-saturday {
+    color: #3498db;
+    /* 파란색 */
+}
+
+.react-datepicker-wrapper {
+  width: 100%;       /* 항상 부모 너비만큼 */
+  min-width: 200px;  /* 필요에 따라 px 값 조절 */
+  box-sizing: border-box;
+}

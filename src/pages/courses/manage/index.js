@@ -22,8 +22,10 @@ function CourseManage() {
   };
 
   return (
-    <div className='courseManage'>
-      <button onClick={handleCreateCourse}>과정생성</button>
+    <div className='course-manage'>
+      <div className="function-area">
+        <button onClick={handleCreateCourse}>과정생성</button>
+      </div>
       {<CourseSection
         title={`${user.username} 강사님 과정 리스트`}
         courses={myCourses}

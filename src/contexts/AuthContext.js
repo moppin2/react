@@ -15,7 +15,6 @@ export function AuthProvider({ children }) {
         const { data } = await api.get('/me');
         setUser(data);
       } catch (err) {
-        console.log('로그인 안됨:', err);
         setUser(null);
       } finally {
         setLoading(false);

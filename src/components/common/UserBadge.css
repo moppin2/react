@@ -1,0 +1,50 @@
+/* src/components/UserBadge.css */
+.user-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-right: 0.5rem;
+}
+
+.user-badge__avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: #f0f0f0;
+}
+
+.user-badge__avatar.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: #888;
+}
+
+.user-badge__name {
+  font-weight: 500;
+}
+
+.user-badge__label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.user-badge__label--admin {
+  background-color: #ff5722;
+  color: #fff;
+}
+
+.user-badge__label--instructor {
+  background-color: #3d40da;
+  color: #fff;
+}
+
+.user-badge__label--user {
+  background-color: #505050;
+  color: #fff;
+}

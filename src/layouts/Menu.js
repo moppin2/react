@@ -3,17 +3,8 @@ import data from "../assets/data/dummy.json";
 import React from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
-
-const getUserLabel = (userType) => {
-  switch (userType) {
-    case 'admin':
-      return ' (관리자)';
-    case 'instructor':
-      return ' (강사회원)';
-    default:
-      return ' (일반회원)';
-  }
-};
+import './Menu.css';
+import UserBadge from '../components/common/UserBadge';
 
 function Menu() {
 
@@ -33,35 +24,32 @@ function Menu() {
   if (loading) return <nav>Loading…</nav>;
 
   return (
-    <div>
-      <nav className="Nav">
-        <div><Link to="/">LOGO</Link></div>
-        <ul className="Menu">
-          {data.menu.filter((item) => item.type === "" && item.active).map((item, index) => (
-            <li key={index}><Link to={item.link}>{item.name}</Link></li>
-          ))}
-          {
-            user &&
-            data.menu.filter((item) => item.type === user.userType && item.active).map((item, index) => (
-              <li key={index}><Link to={item.link}>{item.name}</Link></li>
-            ))
-          }
-        </ul>
+    <nav className="navbar">
+      <div className="brand"><Link to="/">LOGO</Link></div>
+      <ul className="nav">
+        {data.menu.filter((item) => item.type === "" && item.active).map((item, index) => (
+          <li key={index}><Link to={item.link}>{item.name}</Link></li>
+        ))}
         {
-          user ?
-            <div className="LoginInfo">
-              <div>{user.username}님 {getUserLabel(user.userType)}
-              </div>
-              <div><button onClick={handleLogout}>로그아웃</button></div>
-            </div>
-            :
-            <div className="LoginInfo">
-              <div><Link to="/register">회원가입</Link></div>
-              <div><Link to="/login">로그인</Link></div>
-            </div>
+          user &&
+          data.menu.filter((item) => item.type === user.userType && item.active).map((item, index) => (
+            <li key={index}><Link to={item.link}>{item.name}</Link></li>
+          ))
         }
-      </nav>
-    </div>
+      </ul>
+      {
+        user ?
+          <div className="user-info">
+            <UserBadge user={user} avatarUrl={user.avatarUrl} />
+            <span><button className="logout" onClick={handleLogout}>로그아웃</button></span>
+          </div>
+          :
+          <div className="login-info">
+            <div><Link to="/register">회원가입</Link></div>
+            <div><Link to="/login">로그인</Link></div>
+          </div>
+      }
+    </nav>
   );
 }
 

@@ -1,4 +1,3 @@
-import './ReserveClass.css';
 import ReserveBox from './ReserveBox.js';
 import data from '../../../assets/data/dummy.json'
 import React, { useState } from 'react';

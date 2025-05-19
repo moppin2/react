@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import './CourseList.css';
+import UserBadge from '../../../components/common/UserBadge';
 
 export default function CourseList({ courses = [], type = 'default' }) {
     if (!Array.isArray(courses) || courses.length === 0) {
@@ -17,27 +18,51 @@ export default function CourseList({ courses = [], type = 'default' }) {
                     )}
 
                     <div className="course-info">
-                        <h3 className="course-title">
-                            <Link to={`/course/${course.id}`}>{course.title}</Link>
-                        </h3>
                         <div className="course-meta">
-                            <span>강사 : {course.instructor_name}</span>
+                            <span className="association">{course.license_association}</span>
+                            <span className="license">{course.license_name}</span>
+                            <span className="level">{course.level_name}</span>
+                            <span className="region">{course.region_name}</span>
+                        </div>
+                        <h6 className="course-title">
+                            <Link to={`/course/${course.id}`}>
+                                {course.title}
+                            </Link>
+                            {!course.is_published && (
+                                <span className="badge-private">
+                                    비공개
+                                </span>
+                            )}
+                        </h6>
+                        <div className="course-meta">
+                            <UserBadge
+                                user={course.instructor}
+                                avatarUrl={course.instructor_avatar_url}
+                                showUserType={false}
+                            />
                         </div>
                         <div className="course-meta">
-                            <span>과정 : {course.license_association} - {course.license_name}</span>
-                        </div>
-                        <div className="course-meta">
-                            <span>난이도 : {course.level_name}</span>
-                        </div>
-                        <div className="course-meta">
-                            <span>지역 : {course.region_name}</span>
                         </div>
                     </div>
 
                     {type === 'instructor' && (
                         <div className="course-actions">
-                            <button>채팅</button>&nbsp;
-                            <button>수업관리</button>&nbsp;
+                            {course.applied_count > 0 && (
+                                <Link to={`/course/enrollment/approve/${course.id}`}>
+                                    <button>
+                                        등록요청
+                                        <span className="badge">{course.applied_count}</span>
+                                    </button>
+                                </Link>
+                            )}
+
+                            <button>
+                                수강생
+                                {course.approved_count > 0 && (
+                                    <span className="badge">{course.approved_count}</span>
+                                )}
+                            </button>
+
                             <Link to={`/course/edit/${course.id}`}>
                                 <button>수정</button>
                             </Link>
@@ -46,5 +71,6 @@ export default function CourseList({ courses = [], type = 'default' }) {
                 </div>
             ))}
         </div>
+
     );
 }

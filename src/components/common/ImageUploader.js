@@ -37,8 +37,6 @@ export default function ImageUploader({
       const ext = file.name.split('.').pop();
       const resized = await resizeImage(file, maxWidth);
 
-      console.log(targetId);
-
       const presignRes = await api.post('/api/upload', {
         target_type: targetType,
         target_id: targetId,

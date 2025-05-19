@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../../../services/api';
 import ImageUploader from '../../../components/common/ImageUploader';
 import MultiImageUploader from '../../../components/common/MultiImageUploader';
+import './CourseForm.css';
 
 function CourseForm({ initialValues, onSubmit, loading = false }) {
   const [title, setTitle] = useState('');
@@ -83,8 +84,8 @@ function CourseForm({ initialValues, onSubmit, loading = false }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ maxWidth: 600, margin: '0 auto' }}>
-      <h2>과정 정보</h2>
+    <form className="class-form" onSubmit={handleSubmit}>
+      {/* <h2>과정 정보</h2> */}
 
       <ImageUploader
         label="대표 이미지"
@@ -163,10 +164,9 @@ function CourseForm({ initialValues, onSubmit, loading = false }) {
         <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={4} />
       </div>
 
-      <hr />
-      <h3>수료 기준</h3>
+      <label>수료 기준</label>
       {criteriaList.map((c, index) => (
-        <div key={index} style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+        <div key={index} className="criteria-row">
           <input
             placeholder="기준 종류 (예: 출석)"
             value={c.type}
@@ -194,7 +194,6 @@ function CourseForm({ initialValues, onSubmit, loading = false }) {
       ))}
       <button type="button" onClick={() => setCriteriaList([...criteriaList, { type: '', value: '' }])}>+ 기준 추가</button>
 
-      <hr />
       <div>
         <label>
           <input
@@ -202,7 +201,7 @@ function CourseForm({ initialValues, onSubmit, loading = false }) {
             checked={isPublished}
             onChange={(e) => setIsPublished(e.target.checked)}
           />
-          &nbsp;공개
+          공개
         </label>
       </div>
 

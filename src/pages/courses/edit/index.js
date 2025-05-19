@@ -11,7 +11,6 @@ function CourseEdit() {
   const [loading, setLoading] = useState(false);
   const [initialValues, setInitialValues] = useState(null);
 
-  // course 정보 로딩
   useEffect(() => {
     if (!id) return;
     (async () => {
@@ -38,7 +37,7 @@ function CourseEdit() {
       const payload = {
         ...formData,
         id,
-        instructor_id: user.id, // 안전하게 서버에서도 검증함
+        instructor_id: user.id,
       };
       await api.post('/api/course', payload);
       alert('과정이 성공적으로 수정되었습니다.');
@@ -51,10 +50,9 @@ function CourseEdit() {
     }
   };
 
-
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>과정 수정</h1>
+    <div className="course-edit-container">
+      {/* <h1 className="course-edit-title">과정 수정</h1> */}
       {initialValues ? (
         <CourseForm
           initialValues={initialValues}
@@ -62,7 +60,7 @@ function CourseEdit() {
           loading={loading}
         />
       ) : (
-        <p>로딩 중...</p>
+        <p className="loading-text">로딩 중...</p>
       )}
     </div>
   );

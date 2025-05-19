@@ -1,0 +1,151 @@
+/* Navbar container */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  width: 100%;
+  max-width: 1200px;
+  /* height: 50px; */
+  transform: translateX(-50%);
+  box-sizing: border-box;
+  /* 패딩을 width에 포함 */
+  z-index: 1000;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #FFFFFF;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+/* Ensure content below navbar isn't hidden */
+body {
+  padding-top: 3.5rem;
+  /* Adjust based on navbar height (0.5rem+line-height) */
+}
+
+/* Brand logo */
+.navbar .brand a {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333333;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* Navigation list */
+.navbar .nav {
+  display: flex;
+  flex-wrap: wrap;
+  /* wrap menu items onto new line */
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Navigation links */
+.navbar .nav li a {
+  white-space: nowrap;
+  /* prevent individual link wrapping */
+  color: #555555;
+  text-decoration: none;
+  padding: 0.5rem;
+  transition: color 0.2s;
+}
+
+.navbar .nav li a:hover {
+  color: #000000;
+}
+
+/* LoginInfo section */
+.login-info {
+  display: flex;
+  flex-wrap: wrap;
+  /* ensure login info also wraps if needed */
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Username display */
+.login-info .user-name {
+  font-size: 1rem;
+  color: #555555;
+  white-space: nowrap;
+}
+
+/* Logout button & Link styles */
+.login-info a {
+  /* white-space: nowrap; */
+  background-color: #3d40da;
+  color: #FFFFFF;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 0.8rem;
+}
+
+.logout {
+  margin-left: 0.5rem;
+  padding: 0.3rem 0.6rem;
+}
+
+.login-info button:hover,
+.login-info a:hover {
+  background-color: #222492;
+}
+
+
+.navbar .user-info {
+  display: flex;
+  align-items: center;
+}
+
+.navbar .user-info .user-type {
+  display: inline-block;
+  border-radius: 12px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin: 0 0.5rem;
+  background-color: #ffe0e0;
+  color: #da3d3d;
+}
+
+.navbar+div {
+  padding: 0 1rem;
+}
+
+@media (max-width: 768px) {
+  .navbar+div {
+    margin-top: 0;
+  }
+
+  /* 1) transform 해제: fixed가 뷰포트 기준이 되도록 */
+  .navbar {
+    transform: none !important;
+    left: 0 !important;
+    width: 100% !important;
+  }
+
+  /* 2) 모바일에선 .nav만 화면 하단에 고정 */
+  .navbar .nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 1px solid #e0e0e0;
+    justify-content: space-around;
+    padding: 1rem 0.5rem;
+    z-index: 1001;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+  }
+}

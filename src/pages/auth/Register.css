@@ -1,67 +1,101 @@
+/* register.css */
+
+/* Prevent automatic text wrapping */
+.register-container h2,
+.register-container .user-type label,
+.register-container .password-strength,
+.register-container .error {
+  white-space: nowrap;
+}
+
+/* Container centering */
 .register-container {
   max-width: 400px;
-  margin: 50px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  font-family: sans-serif;
-  background-color: #fff;
-  box-sizing: border-box;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #FFFFFF;
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
+/* Heading */
 .register-container h2 {
-  text-align: center; /* 제목 가운데 정렬 */
-  margin-bottom: 20px;
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #555555;
 }
-  
-.user-type {
+
+/* User type radio group */
+.register-container .user-type {
   display: flex;
-  justify-content: space-around;
-  margin-bottom: 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
-
-.register-form {
+.register-container .user-type label {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-input, textarea {
-  padding: 8px;
-  font-size: 14px;
-}
-
-button {
-  padding: 10px;
-  font-size: 16px;
-  background-color: #007bff;
-  color: white;
-  border: none;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.95rem;
+  color: #555555;
   cursor: pointer;
 }
-
-button:hover {
-  background-color: #0056b3;
+.register-container .user-type input {
+  accent-color: #3d40da;
 }
 
-.error {
-  color: red;
-  font-size: 12px;
+/* Form fields */
+.register-container .register-form input,
+.register-container .register-form textarea {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: #333333;
+  background: #FFFFFF;
+  border: 1px solid #CCCCCC;
+  border-radius: 4px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+.register-container .register-form input:focus,
+.register-container .register-form textarea:focus {
+  outline: none;
+  border-color: #3d40da;
+  box-shadow: 0 0 0 3px rgba(61, 64, 218, 0.2);
 }
 
-.password-strength {
-  font-size: 12px;
+/* Password strength indicator */
+.register-container .password-strength {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  color: #555555;
 }
 
-.password-strength.weak {
-  color: red;
+/* Error message */
+.register-container .error {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  color: #DC3545;
 }
 
-.password-strength.medium {
-  color: orange;
+/* Submit button */
+.register-container .register-form button {
+  width: 100%;
+  background-color: #3d40da;
+  color: #FFFFFF;
+  border: none;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
 }
-
-.password-strength.strong {
-  color: green;
+.register-container .register-form button:hover {
+  background-color: #222492;
+  transform: translateY(-1px);
 }
-  

@@ -82,7 +82,7 @@ export default function MultiImageUploader({
   };
 
   return (
-    <div style={{ marginBottom: 16 }}>
+    <div className="multi-image-upload">
       <label>추가 이미지</label>
       <div>
         <button type="button" onClick={() => inputRef.current.click()} disabled={uploading}>
@@ -94,24 +94,22 @@ export default function MultiImageUploader({
           multiple
           ref={inputRef}
           onChange={handleFileChange}
-          style={{ display: 'none' }}
         />
       </div>
 
       {uploading && <p>⏳ 업로드 중...</p>}
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 12 }}>
+      <div>
         {files.map((f) => (
-          <div key={f.file_key} style={{ position: 'relative' }}>
+          <div key={f.file_key}>
             <img
               src={f.url}
               alt="업로드 이미지"
-              style={{ width: 120, height: 120, objectFit: 'cover', borderRadius: 8 }}
             />
             <button
               type="button"
               onClick={() => handleRemove(f.file_key)}
-              style={{ position: 'absolute', top: -8, right: -8 }}
+              
             >
               ❌
             </button>

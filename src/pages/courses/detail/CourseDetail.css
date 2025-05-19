@@ -1,62 +1,85 @@
+/* course-detail.css */
+
+/* Overall container styling */
 .course-detail {
   max-width: 800px;
-  margin: 0 auto;
-  padding: 24px;
-  font-family: sans-serif;
-  line-height: 1.6;
-}
-
-.course-title {
-  font-size: 2rem;
-  margin-bottom: 8px;
-  color: #222;
-}
-
-.course-subinfo {
-  font-size: 0.95rem;
-  color: #666;
-  margin-bottom: 16px;
-}
-
-.course-thumbnail img {
-  width: 100%;
-  max-height: 320px;
-  object-fit: cover;
+  margin: 2rem auto;
+  /* padding: 1.5rem;
+  background: #FFFFFF;
+  border: 1px solid #E0E0E0;
   border-radius: 8px;
-  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05); */
 }
 
-.course-section {
-  margin-bottom: 24px;
+/* Request button wrapper (replace inline style) */
+.course-detail .request-button-wrapper {
+  margin-top: 1.25rem;
+  text-align: center;
 }
 
-.course-section h3 {
-  font-size: 1.2rem;
-  margin-bottom: 8px;
-  color: #333;
+/* Course title */
+.course-detail .course-title {
+  font-size: 1.5rem;
+  color: #333333;
+  margin: 1rem 0 0.5rem;
 }
 
-.course-carousel {
-  display: flex;
-  gap: 12px;
-  overflow-x: auto;
-  padding-bottom: 8px;
+/* Subtitle info lines */
+.course-detail .course-subinfo {
+  font-size: 0.95rem;
+  color: #555555;
+  margin-bottom: 0.5rem;
 }
 
-.course-carousel img {
-  width: 160px;
-  height: 100px;
+/* Cover thumbnail */
+.course-detail .course-thumbnail {
+  margin: 1rem 0;
+}
+.course-detail .course-thumbnail img {
+  width: 100%;
+  border-radius: 4px;
   object-fit: cover;
-  border-radius: 6px;
-  flex-shrink: 0;
 }
 
-.course-criteria li {
+/* Sections (description, curriculum, criteria, gallery) */
+.course-detail .course-section {
+  margin: 1.5rem 0;
+}
+.course-detail .course-section h3 {
+  font-size: 1.25rem;
+  color: #555555;
+  margin-bottom: 0.75rem;
+  white-space: nowrap;
+}
+.course-detail .course-section.text-area p {
+  white-space: pre-wrap;
+  line-height: 1.6;
+  color: #555555;
+}
+
+/* Course criteria list */
+.course-detail .course-criteria {
   list-style: disc;
-  margin-left: 20px;
-  margin-bottom: 4px;
+  margin-left: 1.5rem;
+  color: #555555;
+}
+.course-detail .course-criteria li {
+  margin-bottom: 0.5rem;
 }
 
-.text-area {
-  white-space: pre-line;
+/* Gallery carousel */
+.course-detail .course-carousel {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 0.5rem;
+}
+.course-detail .course-carousel img {
+  flex: 0 0 auto;
+  width: 350px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 4px;
+  scroll-snap-align: start;
 }

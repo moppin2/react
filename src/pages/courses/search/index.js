@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../../services/api';
 import CourseSection from '../components/CourseSection';
+import './Search.css';
 
 function CourseSearchPage() {
   const [courses, setCourses] = useState([]);
@@ -55,10 +56,10 @@ function CourseSearchPage() {
   }, []);
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h2>과정 검색</h2>
+    <div className="course-search-condition">
+      {/* <h2>과정 검색</h2> */}
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>
+      <div>
         <select name="association_code" value={filters.association_code} onChange={handleChange}>
           <option value="">협회 선택</option>
           {codeOptions.ASSOCIATION?.map(c => (

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import "./Login.css";
+// import "./Login.css";
 
 function Login() {  
   const [userType, setUserType] = useState('user');

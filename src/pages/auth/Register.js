@@ -76,7 +76,6 @@ export default function Register() {
       const res = await api.post(endpoint, payload);
       if (res.status >= 200 && res.status < 300) {
         alert('가입 완료!');
-        console.log(res.data);
         manualLogin(res.data); // ✅ 로그인 상태 수동 갱신
         navigate(userType === 'instructor' ? '/instructor/verify' : '/');
 
