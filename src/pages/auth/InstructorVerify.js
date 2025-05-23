@@ -32,7 +32,7 @@ export default function InstructorVeryfy() {
     const fetchData = async () => {
       try {
         const [fileRes, historyRes] = await Promise.all([
-          api.get('/api/upload/list', {
+          api.get('/api/verifyfile/list', {
             params: {
               target_type: 'instructor',
               target_id: targetInstructorId,
@@ -129,7 +129,7 @@ export default function InstructorVeryfy() {
 
   const handleDownload = async (fileKey) => {
     try {
-      const res = await api.get('/api/upload/download-url', {
+      const res = await api.get('/api/download/presigned-url', {
         params: { file_key: fileKey },
       });
       window.open(res.data.url, '_blank');

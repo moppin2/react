@@ -60,7 +60,7 @@
   border-radius: 12px;
   font-size: 0.85rem;
   font-weight: 500;
-  margin-right: 0.5rem;
+  margin-right: 0.3rem;
   border: 1px solid currentColor;
 }
 
@@ -89,6 +89,28 @@
   color: #3f51b5;
 }
 
+/* 학생 예약 상태 라벨 색상 */
+.class-list .status-applied {
+  background: #fffde7;  /* 연한 노랑 */
+  color: #fbc02d;       /* 머스타드 */
+}
+.class-list .status-approved {
+  background: #e8f5e9;  /* 연한 민트 */
+  color: #2e7d32;       /* 다크 그린 */
+}
+.class-list .status-rejected {
+  background: #ffebee;  /* 연한 핑크 */
+  color: #c62828;       /* 딥 레드 */
+}
+.class-list .status-cancel_request {
+  background: #fff8e1;  /* 연한 오렌지 옐로우 */
+  color: #ff8f00;       /* 골든 엠버 */
+}
+.class-list .status-cancelled {
+  background: #eceff1;  /* 연한 그레이 블루 */
+  color: #546e7a;       /* 딥 슬레이트 그레이 */
+}
+
 .class-list .course-info {
   gap: 0.5rem;
   padding: 0.5rem;
@@ -102,4 +124,18 @@
   /* padding: 0.5rem;
   background-color: #f5f5f5;
   border-radius: 6px; */
+}
+
+.class-list .student-action {
+  display: flex;
+  align-items: center;
+  padding: 0.2rem 0;
+}
+
+.class-list .class-actions {
+  padding: 0.4rem 0.4rem 0.4rem 0;
+}
+.class-list .class-actions button {
+  margin-right: 0.3rem;
+  padding: 0.1rem 0.6rem;
 }

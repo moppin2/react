@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-// import "./Login.css";
+import "./Login.css";
 
 function Login() {  
   const [userType, setUserType] = useState('user');
@@ -39,7 +39,7 @@ function Login() {
     return (
       <div>
         <form className="login-form" onSubmit={handleLogin}>
-          <h2>로그인</h2>
+          <h4>로그인</h4>
           
           <div className="user-type">
             <label>
@@ -63,7 +63,7 @@ function Login() {
           </div>
 
           <div className="form-group">
-            <label>이메일</label>
+            {/* <label>이메일</label> */}
             <input
               type="email"
               placeholder="이메일을 입력하세요"
@@ -72,7 +72,7 @@ function Login() {
             />
           </div>
           <div className="form-group">
-            <label>비밀번호</label>
+            {/* <label>비밀번호</label> */}
             <input
               type="password"
               placeholder="비밀번호를 입력하세요"

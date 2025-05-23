@@ -1,38 +1,4 @@
-{   
-    "isLogin": false,
-    "loginID": "student1",
-    "member": [
-        {
-            "id": "student1",
-            "pwd": "1234",
-            "name": "김수한",
-            "type": "S"
-        },
-        {
-            "id": "student2",
-            "pwd": "1234",
-            "name": "김지율",
-            "type": "S"
-        },
-        {
-            "id": "director1",
-            "pwd": "1234",
-            "name": "홍길동",
-            "type": "D"
-        },
-        {
-            "id": "director2",
-            "pwd": "1234",
-            "name": "둘리",
-            "type": "D"
-        },
-        {
-            "id": "director3",
-            "pwd": "1234",
-            "name": "김철수",
-            "type": "D"
-        }
-    ],
+{  
     "menu": [
         {
             "id": "service",
@@ -66,6 +32,13 @@
             "id": "classmanage",
             "name": "수업관리",
             "link": "/class/manage",
+            "type": "user",
+            "active": true
+        },
+        {
+            "id": "classmanage",
+            "name": "수업관리",
+            "link": "/class/manage",
             "type": "instructor",
             "active": true
         },
@@ -77,98 +50,11 @@
             "active": true
         },
         {
-            "id": "class",
-            "name": "수업예약",
-            "link": "/class/reserve",
-            "type": "user",
-            "active": true
-        },
-        {
             "id": "admin",
             "name": "관리자메뉴",
             "link": "/admin",
             "type": "admin",
             "active": true
-        }
-    ],
-
-
-    "search": [
-        {
-        "title": "협회",
-        "value": ["PADI", "AIDA"]
-        },
-        {
-        "title": "레벨",
-        "value": [1, 2, 3, 4]
-        },
-        {
-        "title": "지역",
-        "value": ["서울", "경기", "인천"]
-        }
-    ],
-
-    "course": [
-        {
-        "courseid": "A",
-        "title": "PADI OPEN WATER",
-        "directorid": "director1",
-        "director": "홍길동"
-        },
-        {
-        "courseid": "B",
-        "title": "PADI ADVANCED",
-        "directorid": "director2",
-        "director": "둘리"
-        },
-        {
-        "courseid": "C",
-        "title": "AIDA 프리다이빙 체험",
-        "directorid": "director3",
-        "director": "김철수"
-        }
-    ],
-
-    "class": [
-        {
-        "classid": "C1",
-        "courseid": "A",
-        "title": "기초 이론수업",
-        "date": "2025/04/11(수)",
-        "time": "17:00:00",
-        "place": "강동구 사무실",
-        "seats": 4,
-        "occupied": 3
-        },
-        {
-        "classid": "C2",
-        "courseid": "B",
-        "title": "실습",
-        "date": "2025/04/11(수)",
-        "time": "17:00:00",
-        "place": "강동구 사무실",
-        "seats": 8,
-        "occupied": 7
-        },
-        {
-        "classid": "C3",
-        "courseid": "B",
-        "title": "수심훈련",
-        "date": "2025/04/11(수)",
-        "time": "17:00:00",
-        "place": "K26",
-        "seats": 8,
-        "occupied": 7
-        },
-        {
-        "classid": "C4",
-        "courseid": "B",
-        "title": "구조교육",
-        "date": "2025/04/11(수)",
-        "time": "17:00:00",
-        "place": "송도 환경공단 잠수풀",
-        "seats": 8,
-        "occupied": 7
         }
     ]
 }

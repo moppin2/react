@@ -1,7 +1,7 @@
 /* register.css */
 
 /* Prevent automatic text wrapping */
-.register-container h2,
+.register-container h4,
 .register-container .user-type label,
 .register-container .password-strength,
 .register-container .error {
@@ -11,20 +11,13 @@
 /* Container centering */
 .register-container {
   max-width: 400px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: #FFFFFF;
-  border: 1px solid #E0E0E0;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin: 0 auto;
 }
 
 /* Heading */
-.register-container h2 {
+.register-container h4 {
   text-align: center;
-  font-size: 2rem;
   margin-bottom: 1.5rem;
-  color: #555555;
 }
 
 /* User type radio group */

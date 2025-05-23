@@ -90,7 +90,7 @@ export default function Register() {
 
   return (
     <div className="register-container">
-      <h2>회원가입</h2>
+      <h4>회원가입</h4>
       <div className="user-type">
         <label>
           <input
@@ -123,8 +123,8 @@ export default function Register() {
         {userType === 'instructor' && (
           <>
             <input type="number" name="careerYears" placeholder="경력 (년수)" value={formData.careerYears} onChange={handleChange} required />
-            <input type="text" name="majorCareer" placeholder="주요경력 (선택)" value={formData.majorCareer} onChange={handleChange} />
-            <textarea name="introduction" placeholder="소개글 (선택)" value={formData.introduction} onChange={handleChange} />
+            <textarea name="majorCareer" placeholder="주요경력 (선택)" rows="4" value={formData.majorCareer} onChange={handleChange} />
+            <textarea name="introduction" placeholder="소개글 (선택)" rows="4" value={formData.introduction} onChange={handleChange} />
           </>
         )}
 

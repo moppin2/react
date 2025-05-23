@@ -4,8 +4,8 @@ import Register from "../pages/auth/Register";
 import Login from "../pages/auth/Login";
 import CourseDetail from "../pages/courses/detail";
 import AdminLogin from "../pages/auth/AdminLogin";
-import UserProfile from "../pages/auth/profile/User.js";
-import InstructorProfile from "../pages/auth/profile/Instructor.js";
+import UserProfile from "../pages/profile/user";
+import InstructorProfile from "../pages/profile/instructor";
 
 const publicRoutes = [
   { path: "/", element: <Home /> },

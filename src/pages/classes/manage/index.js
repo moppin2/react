@@ -10,12 +10,14 @@ function ClassManage() {
   const [myClasses, setMyClasses] = useState([]);
 
   useEffect(() => {
-    if (user?.id) {
-      api.get(`/api/classes?instructor_id=${user.id}`)
+    if (user.id) {
+      api.get(`/api/myclasses`)
         .then(res => setMyClasses(res.data))
         .catch(err => console.error('수업 목록 조회 실패', err));
     }
-  }, [user.id]);
+  }, [user.userType, user.id]);
+
+  console.log(myClasses);
 
   const handleCreateClass = () => {
     navigate('/class/create');
@@ -24,7 +26,11 @@ function ClassManage() {
   return (
     <div className='class-manage'>
       <div className="function-area">
-        <button onClick={handleCreateClass}>수업생성</button>
+        {
+          (user.userType === 'instructor') &&
+          <button onClick={handleCreateClass}>수업생성</button>
+        }
+
       </div>
       {<ClassSection
         title={`${user.username} 강사님 수업 리스트`}

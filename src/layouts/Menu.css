@@ -123,6 +123,7 @@ body {
 @media (max-width: 768px) {
   .navbar+div {
     margin-top: 0;
+    margin-bottom: 4rem;
   }
 
   /* 1) transform 해제: fixed가 뷰포트 기준이 되도록 */
