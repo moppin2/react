@@ -1,0 +1,16 @@
+# 모든 텍스트 파일에 대해 기본적으로 LF를 사용하도록 설정
+* text=auto eol=lf
+
+# 특정 파일 타입에 대해 명시적으로 설정 (예시)
+# *.css text eol=lf
+# *.js text eol=lf
+# *.html text eol=lf
+# *.py text eol=lf
+
+# Windows 배치 파일 등 CRLF가 필요한 경우
+# *.bat text eol=crlf
+
+# 이미지나 바이너리 파일은 변환하지 않도록 설정
+*.png binary
+*.jpg binary
+# ... 기타 바이너리 파일 확장자
