@@ -11,7 +11,7 @@ function CourseForm({ initialValues, onSubmit, loading = false }) {
   const [regionCode, setRegionCode] = useState('');
   const [curriculum, setCurriculum] = useState('');
   const [description, setDescription] = useState('');
-  const [criteriaList, setCriteriaList] = useState([{ type: '', value: '' }]);
+  const [criteriaList, setCriteriaList] = useState([{ type: '', value: '', sort_order: '' }]);
   const [licenseId, setLicenseId] = useState('');
   const [coverImageUrl, setCoverImageUrl] = useState('');
   const [coverImageKey, setCoverImageKey] = useState('');
@@ -31,7 +31,7 @@ function CourseForm({ initialValues, onSubmit, loading = false }) {
     setRegionCode(initialValues?.region_code || '');
     setCurriculum(initialValues?.curriculum || '');
     setDescription(initialValues?.description || '');
-    setCriteriaList(initialValues?.criteriaList || [{ type: '', value: '' }]);
+    setCriteriaList(initialValues?.criteriaList || [{ type: '', value: '', sort_order: '' }]);
     setCoverImageUrl(initialValues?.coverImageUrl || '');
     setCoverImageKey(initialValues?.coverImageKey || '');
     setGalleryImages(initialValues?.galleryImages || []);
@@ -185,10 +185,21 @@ function CourseForm({ initialValues, onSubmit, loading = false }) {
               setCriteriaList(list);
             }}
           />
+          <input
+            type="number" // 숫자 입력 권장
+            placeholder="정렬 순서"
+            value={c.sort_order}
+            onChange={(e) => {
+              const list = [...criteriaList];
+              list[index].sort_order = e.target.value === '' ? '' : parseInt(e.target.value, 10) || 0;
+              setCriteriaList(list);
+            }}
+            style={{ width: '100px' }} // 간단한 스타일 예시
+          />
           <button type="button" onClick={() => {
             const list = [...criteriaList];
             list.splice(index, 1);
-            setCriteriaList(list.length ? list : [{ type: '', value: '' }]);
+            setCriteriaList(list.length ? list : [{ type: '', value: '', sort_order: 0 }]);
           }}>삭제</button>
         </div>
       ))}

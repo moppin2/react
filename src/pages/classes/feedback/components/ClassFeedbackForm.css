@@ -1,0 +1,153 @@
+/* src/components/feedback/ClassFeedbackForm.css */
+
+.feedback-form-container {
+  background-color: #ffffff;
+  /* padding: 1.5rem; */
+  /* border-radius: 6px; */
+}
+
+.feedback-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.feedback-form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #444;
+}
+
+.feedback-form input[type="text"],
+.feedback-form textarea,
+.feedback-form select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+.feedback-form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.feedback-form .rating-fieldset {
+  border: 1px solid #eee;
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 0; /* fieldset 자체의 하단 마진 제거 또는 조절 */
+}
+
+.feedback-form .rating-fieldset legend {
+  font-weight: 600;
+  padding: 0 0.5em;
+  color: #444;
+  margin-bottom: 0.5rem; /* legend와 라디오 그룹 사이 간격 */
+}
+
+.feedback-form .radio-group {
+  display: flex;
+  gap: 0.5rem 1rem; /* 세로 간격, 가로 간격 */
+  flex-wrap: wrap; 
+  align-items: center; /* 라디오 버튼 세로 중앙 정렬 */
+}
+
+.feedback-form .radio-label {
+  display: flex;
+  align-items: center;
+  font-weight: normal;
+  margin-bottom: 0.5rem; /* 각 라디오 버튼 아이템의 하단 마진 (줄바꿈 시 간격) */
+  cursor: pointer;
+  padding: 0.25rem 0; /* 클릭 영역 확보 및 보기 좋게 */
+}
+
+.feedback-form input[type="radio"] {
+  margin-right: 0.5rem;
+  /* accent-color: #007bff; // 이 속성 대신 커스텀 스타일을 고려할 수도 있습니다. */
+  /* 커스텀 라디오 버튼을 원하시면 이 부분을 더 복잡하게 만들어야 합니다. */
+  /* 간단한 개선: 크기 및 수직 정렬 */
+  width: 16px;
+  height: 16px;
+  vertical-align: middle; /* 텍스트와의 수직 정렬 */
+}
+
+.feedback-form .checkbox-label {
+  display: flex;
+  align-items: center;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.feedback-form input[type="checkbox"] {
+  margin-right: 0.5rem;
+  width: auto;
+  /* accent-color: #007bff; */
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+
+.feedback-form button[type="submit"] {
+  background-color: #007bff;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  align-self: flex-end; /* 기본은 오른쪽 정렬 */
+}
+
+.feedback-form button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+.feedback-form button[type="submit"]:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #D8000C;
+  background-color: #FFD2D2;
+  border: 1px solid #D8000C;
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+
+/* 모바일 화면 (예: 600px 이하) */
+@media (max-width: 600px) {
+  /* .feedback-form-container {
+    padding: 1rem;
+  } */
+  
+  .feedback-form {
+    gap: 1rem; /* 모바일에서 간격 약간 줄임 */
+  }
+
+  .feedback-form .radio-group {
+    /* 만약 라디오 버튼들이 너무 좁게 표시된다면, flex-direction을 column으로 변경 */
+    /* flex-direction: column; */
+    /* align-items: flex-start; */ /* column일 경우 왼쪽 정렬 */
+    gap: 0.5rem; /* column일 때 간격 */
+  }
+
+  .feedback-form .radio-label {
+     margin-bottom: 0.25rem; /* column일 때 각 라디오 버튼 간격 */
+  }
+
+  .feedback-form button[type="submit"] {
+    width: 100%; /* 모바일에서 버튼 너비 전체 사용 */
+    align-self: center; /* 중앙 정렬 */
+    padding: 0.85rem; /* 터치 영역 확보 */
+  }
+}

@@ -19,8 +19,8 @@ function CourseCreatePage() {
 
       await api.post('api/course', payload);
       alert('과정이 성공적으로 생성되었습니다.');
-
       navigate('/course/manage'); // 목록 페이지로 이동 (경로는 상황에 따라 변경 가능)
+      
     } catch (err) {
       console.error('과정 생성 실패:', err);
       alert('과정 생성에 실패했습니다. 다시 시도해 주세요.');
