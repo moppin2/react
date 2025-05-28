@@ -1,15 +1,20 @@
 // src/pages/instructor/feedback/create/index.js (또는 ManageClassFeedbackPage.jsx 등)
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api from '../../../../services/api'; // api 모듈 경로 (사용자 실제 경로로 수정 필요)
+import api from '../../../../services/api';
+import useCourseProgress from '../../../../hooks/useCourseProgress'; // 사용자 정의 훅 경로
 import ClassFeedbackForm from '../components/FeedbackForm'; // 폼 컴포넌트 경로 (사용자 실제 경로로 수정 필요)
-import '../ClassFeedbackPage.css';
+import '../ClassFeedbackPage.css'; // CSS 파일 경로
 
 export default function CreateClassFeedbackPage() {
     const { classId, studentId } = useParams();
     const navigate = useNavigate();
 
     const [student, setStudent] = useState(null);
+    const [pageLoading, setPageLoading] = useState(true);
+    const [pageError, setPageError] = useState(null);
+    const [currentCourseId, setCurrentCourseId] = useState(null);
+
     const [initialFormValues] = useState({ // 항상 새 폼 기준
         feedbackText: '',
         rating: 5,
@@ -17,91 +22,64 @@ export default function CreateClassFeedbackPage() {
         images: [] // MultiImageUploader의 initialFiles용
     });
 
-    const [loading, setLoading] = useState(true);
-    const [submitting, setSubmitting] = useState(false);
-    const [error, setError] = useState(null);
+    const {
+        criteriaDataForForm, // 이제 훅에서 직접 가공된 데이터를 받음
+        criteriaLoading,
+        criteriaError,
+        // allCourseCriteria,
+        // studentProgress
+    } = useCourseProgress(currentCourseId, studentId);
 
-    const [allCourseCriteria, setAllCourseCriteria] = useState([]); // 과정의 전체 수료 기준 목록
-    const [studentProgress, setStudentProgress] = useState([]);   // 학생이 이미 통과한 기준 정보 목록 ({ criterionId, classId, passed_at, studentName 등 })
+    const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
-        async function loadInitialDataForFeedback() {
-            if (!classId || !studentId) {
-                setError(classId ? "학생 ID가 필요합니다." : "수업 ID가 필요합니다.");
-                setLoading(false);
-                return;
-            }
+        // 이 useEffect 콜백 함수는 async 함수가 아니므로, await를 직접 사용할 수 없습니다.
+        // async 함수를 내부에 정의하고 호출해야 합니다.
 
-            setLoading(true);
-            setError(null);
-            setStudent(null); // 이전 데이터 초기화
-            setAllCourseCriteria([]); // 이전 데이터 초기화
-            setStudentProgress([]);   // 이전 데이터 초기화
+        if (!classId || !studentId) {
+            setPageError(classId ? "학생 ID가 필요합니다." : "수업 ID가 필요합니다.");
+            setPageLoading(false);
+            return;
+        }
 
+        setPageLoading(true);
+        setPageError(null);
+        setStudent(null);
+        setCurrentCourseId(null);
+
+        // async 함수를 정의하고 즉시 호출 (IIFE) 또는 별도 함수로 정의 후 호출
+        const loadPageData = async () => {
             try {
-                // Promise.all을 사용하여 학생 정보와 수업 정보를 병렬로 가져올 수 있습니다.
                 const [studentRes, classRes] = await Promise.all([
                     api.get(`/api/user/${studentId}`),
-                    api.get(`/api/class/${classId}`) // 수업 정보를 가져와 courseId 확보
+                    api.get(`/api/class/${classId}`)
                 ]);
 
                 setStudent(studentRes.data);
-                const currentCourseId = classRes.data?.course_id;
+                const courseIdFromClass = classRes.data?.course_id;
 
-                if (!currentCourseId) {
+                if (!courseIdFromClass) {
                     console.error("Course ID를 수업 정보에서 찾을 수 없습니다.", classRes.data);
-                    // 학생 정보는 로드했으므로 setLoading(false)는 finally에서 처리
                     throw new Error("수업 정보에서 과정 ID를 가져올 수 없습니다.");
                 }
-
-                // 이제 courseId를 알았으니, 수료 기준 및 학생의 통과 현황을 가져옵니다.
-                // 이 API는 { criteria: [...], studentProgress: [...] } 형태의 객체를 반환한다고 가정합니다.
-                const progressStatusRes = await api.get(`/api/course-progress`, {
-                    params: {
-                        courseId: currentCourseId,
-                        studentId: studentId
-                    }
-                });
-
-                setAllCourseCriteria(progressStatusRes.data.criteria || []);
-                setStudentProgress(progressStatusRes.data.studentProgress || []);
+                setCurrentCourseId(courseIdFromClass);
 
             } catch (err) {
-                console.error("피드백 페이지 초기 데이터 로딩 중 오류:", err);
-                // student 상태는 이미 try 블록 시작 전에 null로 설정되었거나, 위에서 성공적으로 설정되었을 수 있습니다.
-                // 에러 발생 시 나머지 데이터 관련 상태도 초기화하는 것이 좋습니다.
-                setAllCourseCriteria([]);
-                setStudentProgress([]);
-                setError(err.response?.data?.message || "정보를 불러오는 중 오류가 발생했습니다.");
+                console.error("피드백 페이지 기본 정보 로딩 중 오류:", err);
+                setPageError(err.response?.data?.message || "기본 정보를 불러오는 중 오류가 발생했습니다.");
             } finally {
-                setLoading(false);
+                setPageLoading(false);
             }
-        }
+        };
+        
+        loadPageData(); // 정의된 async 함수 호출
 
-        loadInitialDataForFeedback();
-    }, [studentId, classId]); // useEffect 의존성에 classId 추가
-
-    
-    console.log('allCourseCriteria: ', allCourseCriteria);
-    console.log('studentProgress: ',studentProgress);
-
-    const criteriaDataForForm = useMemo(() => {
-        return allCourseCriteria.map(criterion => {
-            // studentProgress 배열에서 현재 기준(criterion.id)에 대한 통과 기록을 찾습니다.
-            // studentProgress의 각 항목은 { criterionId, classId, passed_at, ... } 형태라고 가정합니다.
-            const progressRecord = studentProgress.find(p => p.criterionId === criterion.id);
-            return {
-                ...criterion, // id, type, value, description 등 CourseCompletionCriteria의 필드
-                isAlreadyPassed: !!progressRecord, // 이미 통과했는지 여부
-                passedInClassId: progressRecord?.classId, // 어느 수업에서 통과했는지 정보도 필요하면 추가
-                passedAt: progressRecord?.passed_at      // 언제 통과했는지 정보도 필요하면 추가
-            };
-        });
-    }, [allCourseCriteria, studentProgress]);
+    }, [studentId, classId]);
 
     const handleSubmit = async (formData, newlySelectedCriterionIds, feedbackImageFiles) => {
         setSubmitting(true);
-        setError(null);
+        setPageError(null);
+
 
         try {
             const payload = {
@@ -110,27 +88,31 @@ export default function CreateClassFeedbackPage() {
                 feedback_text: formData.feedbackText,
                 rating: formData.rating,
                 file_keys: feedbackImageFiles ? feedbackImageFiles.map(file => file.file_key).filter(Boolean) : [],
-                passed_criterion_ids: newlySelectedCriterionIds || [], // 새롭게 통과한 기준 ID 목록 추가
+                passed_criterion_ids: newlySelectedCriterionIds || [],
             };
 
             await api.post(`/api/class-feedbacks`, payload);
-            // const savedFeedback = response.data; // 필요하다면 응답 사용
-
             alert('피드백을 저장했습니다.');
             navigate(-1);
         } catch (err) {
             console.error("Failed to submit feedback:", err);
             const errorMessage = err.response?.data?.message || err.message || '저장 중 오류가 발생했습니다.';
-            setError(errorMessage);
+            setPageError(errorMessage); // pageError 상태 사용
             alert(errorMessage);
         } finally {
             setSubmitting(false);
         }
     };
 
-    if (loading) return <p>로딩 중…</p>;
-    if (error) return <p>오류: {error}</p>;
-    if (!student) return <p>학생 정보를 찾을 수 없습니다.</p>;
+    // pageLoading과 criteriaLoading을 합쳐서 전체 로딩 상태 결정
+    const isLoading = pageLoading || criteriaLoading;
+    // pageError와 criteriaError를 합쳐서 전체 에러 상태 결정
+    const displayError = pageError || criteriaError;
+
+
+    if (isLoading) return <p>로딩 중…</p>;
+    if (displayError) return <p>오류: {displayError}</p>;
+    if (!student) return <p>학생 정보를 찾을 수 없습니다.</p>; // 로딩 완료 후에도 학생 정보가 없을 경우    
 
     return (
         <div className="manage-feedback-page">
@@ -140,9 +122,9 @@ export default function CreateClassFeedbackPage() {
             <ClassFeedbackForm
                 initialValues={initialFormValues}
                 initialCriteriaData={criteriaDataForForm}
-                onSubmit={handleSubmit} // 수정된 handleSubmit 전달
+                onSubmit={handleSubmit}
                 isSubmitting={submitting}
-                existingFeedbackId={null} // 생성 모드
+                existingFeedbackId={null}
             />
         </div>
     );

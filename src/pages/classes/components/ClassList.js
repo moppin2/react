@@ -1,34 +1,32 @@
 import './ClassList.css';
 import UserBadge from '../../../components/common/UserBadge';
+import StatusBadge from '../../../components/common/StatusBadge';
 import { useAuth } from '../../../hooks/useAuth';
 import api from '../../../services/api';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import FeedbackActionModal from './FeedbackActionModal';
+import FeedbackStatusBadge from './FeedbackStatusBadge';
+import ReviewStatusBadge from './ReviewStatusBadge';
 
 // 상태 키와 화면에 보여줄 레이블 매핑
 const STATUS_LABEL = {
     // class status
-    reserved_open: '예약가능',
-    reserved_closed: '예약마감',
-    in_progress: '진행중',
-    awaiting_feedback: '피드백예정',
-    completed: '완료',
+    reserved_open: { text: '예약가능', status: 'action-waiting', symbol: '', handler: null },
+    reserved_closed: { text: '예약마감', status: 'action-waiting', symbol: '', handler: null },
+    in_progress: { text: '진행중', status: 'action-waiting', symbol: '', handler: null },
+    awaiting_feedback: { text: '피드백예정', status: 'action-need', symbol: '', handler: null },
+    completed: { text: '완료', status: 'complete', symbol: '', handler: null },
 
     // reservation status
-    applied: '신청중',
-    approved: '예약완료',
-    rejected: '예약거부',
-    cancel_request: '취소요청',
-    cancelled: '예약취소',
+    applied: { text: '신청중', status: 'action-need', symbol: '', handler: null },
+    approved: { text: '예약완료', status: 'complete', symbol: '', handler: null },
+    rejected: { text: '예약거부', status: 'cancel', symbol: '', handler: null },
+    cancel_request: { text: '취소요청', status: 'action-need', symbol: '', handler: null },
+    cancelled: { text: '예약취소', status: 'cancel', symbol: '', handler: null },
 };
 
 export default function ClassList({ classes = [], refreshMyClasses }) {
     const { user, loading: authLoading } = useAuth();
     const [actionLoading, setActionLoading] = useState(null);
-    const [isFeedbackActionModalOpen, setIsFeedbackActionModalOpen] = useState(false);
-    const [selectedFeedbackForModal, setSelectedFeedbackForModal] = useState(null);
-    const navigate = useNavigate();
 
     if (authLoading) return <div>Loading...</div>;
     if (actionLoading) return <div>Loading...</div>;
@@ -78,10 +76,6 @@ export default function ClassList({ classes = [], refreshMyClasses }) {
             reservationId
         );
     };
-    // 학생 후기 작성
-    const handleWriteReview = (classId) => {
-        navigate(`/review/write/${classId}`);
-    };
 
     // 강사 승인/거절/취소 처리
     const handleApprove = async (reservationId) => {
@@ -117,83 +111,48 @@ export default function ClassList({ classes = [], refreshMyClasses }) {
             reservationId
         );
     };
-    // 강사 피드백 작성
-    const handleWriteFeedback = (classId, userId) => {
-        navigate(`/class/${classId}/feedback/${userId}`);
-    };
-
-    const handleEditFeedback = (feedbackId, classId, studentId) => {
-        navigate(`/feedback/edit/${feedbackId}`);
-        setIsFeedbackActionModalOpen(false); // 모달 닫기
-    };
-
-    const handleRequestPublication = async (feedbackId) => {
-        await handleApiAction(
-            () => api.put(`/api/class-feedbacks/${feedbackId}/request-publication`),
-            '공개 요청을 보냈습니다.',
-            '공개 요청 실패',
-            `feedback-${feedbackId}` // 로딩 상태를 위한 고유 ID
-        );
-        closeFeedbackActionModal();
-    };
-
-    const handleFinalizeNonPublic = async (feedbackId) => {
-        await handleApiAction(
-            () => api.put(`/api/class-feedbacks/${feedbackId}/finalize-non-public`),
-            '미공개로 확정되었습니다.',
-            '미공개 확정 실패',
-            `feedback-${feedbackId}`
-        );
-        closeFeedbackActionModal();
-    };
-
-
-    // 2. 모달을 여는 함수 (피드백 객체를 받아 상태에 저장)
-    const openFeedbackActionModal = (feedback) => {
-        setSelectedFeedbackForModal(feedback);
-        setIsFeedbackActionModalOpen(true);
-    };
-
-    // 모달을 닫는 함수
-    const closeFeedbackActionModal = () => {
-        setIsFeedbackActionModalOpen(false);
-        setSelectedFeedbackForModal(null);
-    };
-
-    const handleApproveFeedbackPublication = (feedbackId) => {
-
-    }
-
-    const handleRejectFeedbackPublication = (feedbackId) => {
-
-    }
-
-    const handleViewFeedbackDetails = (feedbackId) => {
-        console.log(`Viewing details for feedback ID: ${feedbackId}`);
-        // 예: navigate(`/instructor/feedback/details/${feedbackId}`);
-        // 또는 모달을 띄워 상세 정보 표시
-        // setSelectedFeedbackForDetailModal(feedbackId); // 상세 보기용 모달 상태 설정
-        // setIsFeedbackDetailModalOpen(true);
-    };
-
 
     return (
         <div className="class-list">
             {classes.map((cls) => (
                 <div key={cls.id} className="class-card">
 
+                    {/* 정원 */}
                     <span className="highlight">{cls.reserved_count || 0}</span>
                     <span>/{cls.capacity}&nbsp;&nbsp;</span>
                     {/* 상단 상태 및 카운트, 학생 예약 상태 뱃지 */}
-                    <span className={`status-badge status-${cls.status}`}>
-                        {STATUS_LABEL[cls.status]}
-                    </span>
+                    <StatusBadge
+                        status={STATUS_LABEL[cls.status]['status']}
+                        badgeText={STATUS_LABEL[cls.status]['text']}
+                        actionSymbol={STATUS_LABEL[cls.status]['symbol']}
+                        actionHandler={STATUS_LABEL[cls.status]['handler']}
+                    />
                     {/* 학생 모드: 내 예약 상태 뱃지 */}
-                    {user?.userType === 'user' && cls.myReservation?.status && (
-                        <span className={`status-badge status-${cls.myReservation.status}`}>
-                            {STATUS_LABEL[cls.myReservation.status]}
-                        </span>
+                    {user?.userType === 'user' && cls.status === 'completed' && cls.myReservation?.status && cls.myReservation.status !== 'approved' && (
+                        <StatusBadge
+                            status={STATUS_LABEL[cls.myReservation.status]['status']}
+                            badgeText={STATUS_LABEL[cls.myReservation.status]['text']}
+                            actionSymbol={STATUS_LABEL[cls.myReservation.status]['symbol']}
+                            actionHandler={STATUS_LABEL[cls.myReservation.status]['handler']}
+                            title={'(클릭하여 액션 보기)'}
+                        />
                     )}
+
+                    {user?.userType === 'user' && cls.status === 'completed' && cls.myReservation?.status && cls.myReservation.status === 'approved' && (
+                        <FeedbackStatusBadge
+                            feedback={cls.feedback}
+                            role="student"
+                            classId={cls.id}
+                            studentId={user.id}
+                            refreshMyClasses={refreshMyClasses}
+                        />)}
+                    {user?.userType === 'user' && cls.status === 'completed' && (
+                        <ReviewStatusBadge
+                            review={cls.review}
+                            role="student"
+                            classId={cls.id}
+                            studentId={user.id}
+                        />)}
 
                     {/* 수업 일시 */}
                     <p className="class-datetime">
@@ -225,10 +184,33 @@ export default function ClassList({ classes = [], refreshMyClasses }) {
                             cls.reservations.map((r) => (
                                 <div key={r.id} className="student-action">
                                     <UserBadge user={r.user} avatarUrl={r.user.avatarUrl} showUserType={false} />
-                                    {/* 학생 뱃지 옆 예약 상태 뱃지 */}
-                                    <span className={`status-badge status-${r.status}`}>
-                                        {STATUS_LABEL[r.status]}
-                                    </span>&nbsp;&nbsp;
+                                    {
+                                        r.status === 'approved' && cls.status === 'completed' ? (
+                                            <>
+                                                <FeedbackStatusBadge
+                                                    feedback={r.feedback}
+                                                    role="instructor"
+                                                    classId={cls.id}
+                                                    studentId={r.user.id}
+                                                    refreshMyClasses={refreshMyClasses}
+                                                />
+
+                                                <ReviewStatusBadge
+                                                    review={cls.review}
+                                                    role="instructor"
+                                                    classId={cls.id}
+                                                    studentId={user.id}
+                                                />
+                                            </>
+                                        ) : ( // 학생 뱃지 옆 예약 상태 뱃지 
+                                            <StatusBadge
+                                                status={STATUS_LABEL[r.status]['status']}
+                                                badgeText={STATUS_LABEL[r.status]['text']}
+                                                actionSymbol={STATUS_LABEL[r.status]['symbol']}
+                                                actionHandler={STATUS_LABEL[r.status]['handler']}
+                                            />
+                                        )
+                                    }
 
                                     {/* 버튼 로직 */}
                                     {cls.status === 'reserved_open' && r.status === 'applied' && (
@@ -247,18 +229,6 @@ export default function ClassList({ classes = [], refreshMyClasses }) {
                                         </>
                                     )}
 
-                                    {cls.status === 'completed' && (
-                                        <>
-                                            {!r.feedback && r.status === 'approved' && ( // 예약상태는 백엔드에서 보정됨
-                                                <button onClick={() => handleWriteFeedback(cls.id, r.user.id)}>피드백</button>
-                                            )}
-
-                                            {r.feedback && r.feedback.is_publication_requested === null && ( // Case 2: 피드백이 있고, 임시저장 상태인 경우
-                                                <button className="feedback-action" onClick={() => openFeedbackActionModal(r.feedback)}>피드백 Action</button>
-                                            )}
-                                        </>
-                                    )}
-
                                 </div>
                             ))
                         ) : (
@@ -272,50 +242,8 @@ export default function ClassList({ classes = [], refreshMyClasses }) {
                                 {cls.status === 'reserved_closed' && cls.myReservation?.status === 'applied' && (
                                     <button onClick={() => handleCancelRequest(cls.myReservation.id)}>취소신청</button>
                                 )}
-                                {cls.status === 'in_progress' && null}
-                                {cls.status === 'completed' && !cls.review && (
-                                    <button onClick={() => handleWriteReview(cls.id)}>후기작성</button>
-                                )}
-
-                                {cls.feedback && (
-                                    <>
-                                        <button onClick={() => handleViewFeedbackDetails(cls.feedback.id)}>피드백 보기</button>
-
-                                        {!cls.feedback.publish_approved && !cls.feedback.publish_rejected && (
-                                            <>
-                                                <button onClick={() => handleApproveFeedbackPublication(cls.feedback.id)}>피드백 공개</button>
-                                                <button onClick={() => handleRejectFeedbackPublication(cls.feedback.id)}>피드백 비공개</button>
-                                            </>
-                                        )}
-
-                                        {/* 학생이 이미 공개 승인한 경우 */}
-                                        {cls.feedback.publish_approved === true && (
-                                            <span> (공개 승인됨)</span>
-                                        )}
-                                        {/* 학생이 공개 거절한 경우 */}
-                                        {cls.feedback.publish_rejected === true && (
-                                            <span> (공개 거절됨)</span>
-                                        )}
-                                    </>
-                                )}
                             </>
                         )}
-
-
-                        <div>
-                            {/* 4. 모달 컴포넌트 렌더링 (선택된 피드백이 있을 때만) */}
-                            {selectedFeedbackForModal && (
-                                <FeedbackActionModal
-                                    isOpen={isFeedbackActionModalOpen}
-                                    onClose={closeFeedbackActionModal}
-                                    feedback={selectedFeedbackForModal} // 선택된 피드백 객체 전달
-                                    // 모달 내부 버튼에서 사용할 핸들러 함수들 전달
-                                    onEdit={() => handleEditFeedback(selectedFeedbackForModal.id, selectedFeedbackForModal.class_id, selectedFeedbackForModal.user_id)}
-                                    onRequestPublication={() => handleRequestPublication(selectedFeedbackForModal.id)}
-                                    onFinalizeNonPublic={() => handleFinalizeNonPublic(selectedFeedbackForModal.id)}
-                                />
-                            )}
-                        </div>
                     </div>
                 </div>
             ))}

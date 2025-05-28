@@ -1,0 +1,53 @@
+/* src/components/common/ActionPopoverMenu.css */
+.action-popover-menu {
+    min-width: 160px;
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+    padding: 6px 0;
+    z-index: 1050;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.action-popover-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.action-popover-menu .menu-item-button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 8px 12px;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.875rem; /* 14px */
+    color: #333;
+    transition: background-color 0.1s ease-in-out;
+}
+
+.action-popover-menu .menu-item-button:hover {
+    background-color: #f0f0f0;
+}
+
+.action-popover-menu .menu-item-button:disabled {
+    color: #aaa;
+    cursor: not-allowed;
+    background-color: transparent;
+}
+
+.action-popover-menu .menu-item-icon {
+    margin-right: 10px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 1.1em;
+}
+
+.action-popover-menu .menu-separator {
+    height: 1px;
+    background-color: #eee;
+    margin: 4px 0;
+}

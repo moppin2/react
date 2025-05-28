@@ -1,27 +1,48 @@
+// src/pages/instructor/feedback/edit/index.js (또는 사용자의 실제 경로에 맞게 수정)
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api from '../../../../services/api';
-import FeedbackForm from '../components/FeedbackForm';
+import api from '../../../../services/api'; // API 서비스 파일 경로 (실제 경로로 수정 필요)
+import FeedbackForm from '../components/FeedbackForm'; // 폼 컴포넌트 경로 (실제 경로로 수정 필요)
+import useCourseProgress from '../../../../hooks/useCourseProgress'; // 커스텀 훅 경로
+// import '../ClassFeedbackPage.css'; // 필요하다면 CSS 파일 경로
 
 export default function EditFeedbackPage() {
-    const { feedbackId } = useParams();
+    const { feedbackId } = useParams(); // URL에서 feedbackId 가져오기
     const navigate = useNavigate();
 
-    const [initialFormValues, setInitialFormValues] = useState(null);
-    const [studentName, setStudentName] = useState('');
-    const [classIdForDisplay, setClassIdForDisplay] = useState('');
-    const [submitting, setSubmitting] = useState('');
+    const [initialFormValues, setInitialFormValues] = useState(null); // 폼 초기값 (로딩 전 null)
+    const [studentName, setStudentName] = useState(''); // 표시용 학생 이름
+    const [classIdForDisplay, setClassIdForDisplay] = useState(''); // 표시용 수업 ID
+    
+    const [pageLoading, setPageLoading] = useState(true); // 페이지 기본 정보 로딩 상태
+    const [submitting, setSubmitting] = useState(false);
+    const [pageError, setPageError] = useState(null); // 페이지 기본 정보 에러 상태
 
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    // --- 수료 기준 로딩을 위한 상태 ---
+    const [currentCourseId, setCurrentCourseId] = useState(null);
+    const [currentStudentIdForHook, setCurrentStudentIdForHook] = useState(null);
 
+    const {
+        criteriaDataForForm,
+        criteriaLoading,
+        criteriaError,
+        // allCourseCriteria,
+        // studentProgress
+    } = useCourseProgress(currentCourseId, currentStudentIdForHook);
+
+    console.log('criteriaDataForForm: ', criteriaDataForForm)
+
+    // 기존 피드백 데이터 및 관련 정보를 불러오는 함수
     const loadFeedbackForEdit = useCallback(async () => {
-        setLoading(true);
-        setError(null);
+        setPageLoading(true);
+        setPageError(null);
+        setCurrentCourseId(null); // 초기화
+        setCurrentStudentIdForHook(null); // 초기화
+
         try {
-            // 1. 피드백 기본 정보 및 이미지 정보 한 번에 가져오기
             const feedbackRes = await api.get(`/api/class-feedbacks/${feedbackId}`);
-            const feedbackData = feedbackRes.data; // 이 안에 images 배열이 포함되어 있다고 가정
+            const feedbackData = feedbackRes.data; 
+            // feedbackData.class_id
 
             if (!feedbackData) {
                 throw new Error('피드백 정보를 찾을 수 없습니다.');
@@ -33,23 +54,35 @@ export default function EditFeedbackPage() {
                 return;
             }
 
-            // (선택사항) 학생 이름, 수업 ID 등 표시용 정보 설정
-            // feedbackData 객체 내에 user.name, class.id 등이 이미 포함되어 있다면 직접 사용
-            setClassIdForDisplay(feedbackData.class_id || feedbackData.class?.id); // API 응답 구조에 따라
+            setClassIdForDisplay(feedbackData.class_id || feedbackData.class?.id);
             setStudentName(feedbackData.user?.name || '알 수 없는 학생');
+            
+            // courseId와 studentId를 상태에 설정하여 useCourseProgress 훅이 실행되도록 함
+            // feedbackData.class.course.id 또는 feedbackData.course_id 등으로 courseId를 가져와야 함
+            // feedbackData.user.id 또는 feedbackData.user_id로 studentId를 가져와야 함
+            const courseIdFromFeedback = feedbackData.class?.course_id || feedbackData.course_id; // API 응답 구조에 따라
+            const studentIdFromFeedback = feedbackData.user_id || feedbackData.user?.id;
+
+            if (!courseIdFromFeedback || !studentIdFromFeedback) {
+                throw new Error("피드백 데이터에서 과정 ID 또는 학생 ID를 찾을 수 없습니다.");
+            }
+            setCurrentCourseId(courseIdFromFeedback);
+            setCurrentStudentIdForHook(studentIdFromFeedback);
 
 
             setInitialFormValues({
                 feedbackText: feedbackData.feedback_text || '',
                 rating: feedbackData.rating ?? 5,
-                images: feedbackData.images || [] // API 응답에 포함된 이미지 배열 사용
+                isPublicRequest: false, // 수정 시에는 이 값은 폼에서 직접 관리하지 않음 (별도 액션)
+                images: feedbackData.images || []
             });
 
         } catch (err) {
             console.error("Failed to load feedback for editing:", err);
-            setError(err.response?.data?.message || "피드백 정보를 불러오는 중 오류가 발생했습니다.");
+            setPageError(err.response?.data?.message || "피드백 정보를 불러오는 중 오류가 발생했습니다.");
+            setInitialFormValues(null);
         } finally {
-            setLoading(false);
+            setPageLoading(false); // 페이지 기본 정보 로딩 완료
         }
     }, [feedbackId, navigate]);
 
@@ -57,60 +90,65 @@ export default function EditFeedbackPage() {
         if (feedbackId) {
             loadFeedbackForEdit();
         } else {
-            // ... (기존 ID 없음 에러 처리)
+            setPageError("잘못된 접근입니다: 피드백 ID가 없습니다.");
+            setPageLoading(false);
         }
     }, [feedbackId, loadFeedbackForEdit]);
 
-    const handleSubmit = async (formData, uploadedImageList) => {
-        // formData는 ClassFeedbackForm에서 넘어온 { feedbackText, rating, isPublicRequest } 형태
-        // uploadedImageList는 ClassFeedbackForm에서 넘어온 [{ file_key, name, url }, ...] 형태
-
-        if (!feedbackId) { // feedbackId가 유효한지 확인 (useEffect에서 이미 로드했겠지만)
+    // 폼 제출 핸들러 (피드백 업데이트)
+    const handleSubmit = async (formData, newlySelectedCriterionIds, uploadedImageList) => {
+        if (!feedbackId) {
             alert("수정할 피드백 ID가 올바르지 않습니다.");
             return;
         }
 
         setSubmitting(true);
-        setError(null);
+        setPageError(null); // 이전 에러 초기화
 
         try {
             const payload = {
                 feedback_text: formData.feedbackText,
                 rating: formData.rating,
                 file_keys: uploadedImageList ? uploadedImageList.map(file => file.file_key).filter(Boolean) : [],
-                // 사용자님의 요청에 따라, is_publication_requested 관련 정보는 페이로드에서 제외합니다.
-                // 백엔드의 updateFeedback 컨트롤러가 수정 시 is_publication_requested 등의 상태를
-                // null 또는 false로 초기화하는 로직을 가지고 있습니다.
+                passed_criterion_ids: newlySelectedCriterionIds || [], // 새롭게 통과(또는 이번에 선택)한 기준 ID 목록
+                // is_publication_requested 관련 정보는 이 API에서 직접 변경하지 않음
             };
 
-            // API 호출: PUT 메서드 사용 및 URL에 feedbackId 포함
             await api.put(`/api/class-feedbacks/${feedbackId}`, payload);
 
             alert('피드백이 성공적으로 수정되었습니다.');
-            navigate(-1); // 또는 목록 페이지 등 적절한 곳으로 이동
+            navigate(-1); 
 
         } catch (err) {
             console.error('피드백 수정 실패:', err);
             const errorMessage = err.response?.data?.message || err.message || '피드백 수정 중 오류가 발생했습니다.';
-            setError(errorMessage); // 에러 상태 업데이트
-            alert(errorMessage);    // 사용자에게 알림
+            setPageError(errorMessage);
+            alert(errorMessage);
         } finally {
             setSubmitting(false);
         }
     };
 
-    if (loading) return <p>피드백 정보를 불러오는 중…</p>;
-    if (submitting) return <p>저장하는 중…</p>;
-    if (error) return <p>오류: {error}</p>;
-    if (!initialFormValues) return <p>피드백을 찾을 수 없거나 수정할 수 없는 상태입니다.</p>;
+    // 전체 로딩 상태: 페이지 기본 정보 로딩 중이거나, 수료 기준 정보 로딩 중일 때
+    const isLoading = pageLoading || criteriaLoading;
+    // 전체 에러 상태: 페이지 기본 정보 에러 또는 수료 기준 정보 에러
+    const displayError = pageError || criteriaError;
+
+    if (isLoading) return <p>피드백 정보를 불러오는 중…</p>;
+    if (submitting) return <p>피드백을 저장하는 중…</p>;
+    if (displayError) return <p>오류: {displayError}</p>;
+    if (!initialFormValues) return <p>피드백을 찾을 수 없거나 현재 수정할 수 없는 상태입니다.</p>;
 
     return (
         <div className="edit-feedback-page-container">
             <FeedbackForm
                 initialValues={initialFormValues}
+                initialCriteriaData={criteriaDataForForm} // 커스텀 훅에서 가져온 가공된 데이터 전달
                 onSubmit={handleSubmit}
-                // isSubmitting은 handleSubmit 내에서 관리하거나 props로 받아야 함
+                isSubmitting={submitting}
                 existingFeedbackId={Number(feedbackId)}
+                classIdForDisplay={classIdForDisplay}
+                studentNameForDisplay={studentName}
             />
         </div>
     );

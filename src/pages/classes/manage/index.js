@@ -8,16 +8,6 @@ function ClassManage() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [myClasses, setMyClasses] = useState([]);
-
-  // useEffect(() => {
-  //   if (user.id) {
-  //     api.get(`/api/myclasses`)
-  //       .then(res => setMyClasses(res.data))
-  //       .catch(err => console.error('수업 목록 조회 실패', err));
-  //   }
-  // }, [user.userType, user.id]);
-
-
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
 
   // 1. 데이터 로딩 함수를 useCallback으로 정의
@@ -34,10 +24,11 @@ function ClassManage() {
         setIsLoading(false);
       }
     } else {
+      console.log('user 없음');
       setMyClasses([]); // user 정보가 없으면 목록 비우기
     }
-  }, [user]); 
-  
+  }, [user]);
+
   useEffect(() => {
     loadMyClasses();
   }, [loadMyClasses]); // loadMyClasses 함수 자체가 의존성

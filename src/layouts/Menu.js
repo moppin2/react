@@ -2,24 +2,12 @@ import { Link } from "react-router-dom";
 import data from "../assets/data/dummy.json";
 import React from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
 import './Menu.css';
 import UserBadge from '../components/common/UserBadge';
 
 function Menu() {
 
-  const { user, loading, logout } = useAuth()
-  const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-      // 로그아웃 성공하면 리다이렉트 or 상태 초기화
-      navigate('/login');
-    } catch (error) {
-      console.error('Logout failed', error);
-    }
-  };
+  const { user, loading } = useAuth()
 
   if (loading) return <nav>Loading…</nav>;
 
@@ -41,7 +29,6 @@ function Menu() {
         user ?
           <div className="user-info">
             <UserBadge user={user} avatarUrl={user.avatarUrl} />
-            <span><button className="logout" onClick={handleLogout}>로그아웃</button></span>
           </div>
           :
           <div className="login-info">
