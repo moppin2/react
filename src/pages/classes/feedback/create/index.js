@@ -1,4 +1,3 @@
-// src/pages/instructor/feedback/create/index.js (또는 ManageClassFeedbackPage.jsx 등)
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../../../services/api';

@@ -10,7 +10,7 @@ export default function ReviewStatusBadge({
     studentId,     // 피드백 대상 학생 ID (액션에 필요할 수 있음, 강사 역할 시)
 }) {
     const navigate = useNavigate();
-    
+
     const handleWriteReview = (classId) => {
         navigate(`/review/write/${classId}`);
     };
@@ -23,12 +23,17 @@ export default function ReviewStatusBadge({
 
     if (role === 'instructor') {
         if (!review) {
-            badgeText = '리뷰대기';
+            badgeText = '리뷰없음';
             badgeStyle = 'action-waiting';
             actionSymbol = '';
             actionHandler = () => { };
         } else {
-            badgeText = '리뷰완료';
+            if(review.is_public){
+                badgeText = '공개리뷰';
+            }else{                
+                badgeText = '비공개리뷰';
+            }
+            
             badgeStyle = 'complete';
             actionSymbol = ''
             actionHandler = () => { };

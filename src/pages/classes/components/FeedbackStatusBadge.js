@@ -99,11 +99,23 @@ export default function FeedbackStatusBadge({
     };
     
 
-    const handleApproveFeedbackPublication = (feedbackId) => {
+    const handleApproveFeedbackPublication = async (feedbackId) => {
+        await handleApiAction(
+            () => api.put(`/api/class-feedbacks/${feedbackId}/approve-publication`),
+            '공개요청을 승인하였습니다.',
+            '공개요청 승인 실패',
+            `feedback-${feedbackId}`
+        );
 
     }
 
-    const handleRejectFeedbackPublication = (feedbackId) => {
+    const handleRejectFeedbackPublication = async (feedbackId) => {
+        await handleApiAction(
+            () => api.put(`/api/class-feedbacks/${feedbackId}/reject-publication`),
+            '공개요청을 거절하였습니다.',
+            '공개요청 거절 실패',
+            `feedback-${feedbackId}`
+        );
 
     }
 
@@ -117,12 +129,12 @@ export default function FeedbackStatusBadge({
         if (!feedback) {
             badgeText = '피드백 작성';
             badgeStyle = 'action-need'; // 'action-write' 클래스 추가하여 클릭 유도
-            actionSymbol = ''
+            actionSymbol = '+'
             actionHandler = () => handleWriteFeedback(classId, studentId);
         } else if (feedback.is_publication_requested === null) {
-            badgeText = '피드백 조치';
+            badgeText = '피드백 임시저장';
             badgeStyle = 'action-need';
-            actionSymbol = '';
+            actionSymbol = '+';
             actionHandler = (event) => openMenuForFeedbackAction(event, feedback);
         } else if (feedback.is_publication_requested === true && !feedback.publish_approved && !feedback.publish_rejected) {
             badgeText = '피드백 공개요청중';
@@ -130,17 +142,17 @@ export default function FeedbackStatusBadge({
             actionSymbol = '';
             actionHandler = () => handleViewFeedbackDetails(feedback.id);
         } else if (feedback.publish_approved === true) {
-            badgeText = '피드백완료(공개)';
+            badgeText = '공개피드백';
             badgeStyle = 'complete';
             actionSymbol = '';
             actionHandler = () => handleViewFeedbackDetails(feedback.id);
         } else if (feedback.publish_rejected === true) {
-            badgeText = '피드백완료(비공개)';
+            badgeText = '비공개피드백';
             badgeStyle = 'complete';
             actionSymbol = '';
             actionHandler = () => handleViewFeedbackDetails(feedback.id);
         } else if (feedback.is_publication_requested === false) {
-            badgeText = '피드백완료(비공개)';
+            badgeText = '비공개피드백';
             badgeStyle = 'complete';
             actionSymbol = '';
             actionHandler = () => handleViewFeedbackDetails(feedback.id);
@@ -159,20 +171,20 @@ export default function FeedbackStatusBadge({
         } else if (feedback.is_publication_requested === true && !feedback.publish_approved && !feedback.publish_rejected) {
             badgeText = '피드백 공개요청';
             badgeStyle = 'action-need';
-            actionSymbol = '';
+            actionSymbol = '+';
             actionHandler = (event) => { openMenuForFeedbackOpenRequest(event, feedback) };
         } else if (feedback.publish_approved === true && feedback.is_public === true) {
-            badgeText = '피드백완료(공개)';
+            badgeText = '공개피드백';
             badgeStyle = 'complete';
             actionSymbol = '';
             actionHandler = () => handleViewFeedbackDetails(feedback.id);
         } else if (feedback.publish_rejected === true) {
-            badgeText = '피드백완료(비공개)';
+            badgeText = '비공개피드백';
             badgeStyle = 'complete';
             actionSymbol = '';
             actionHandler = () => handleViewFeedbackDetails(feedback.id);
         } else if (feedback.is_publication_requested === false) {
-            badgeText = '피드백완료(비공개)';
+            badgeText = '비공개피드백';
             badgeStyle = 'complete';
             actionSymbol = '';
             actionHandler = () => handleViewFeedbackDetails(feedback.id);
