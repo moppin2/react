@@ -39,7 +39,7 @@ export default function ReviewForm({
                 purpose="gallery" // 또는 'review_image'
                 targetType="review" // UploadFile 테이블의 target_type
                 targetId={existingReviewId} // 수정 시에만 review ID 전달
-                isPublic={isPublic} // 리뷰의 공개 여부를 따를 수 있음
+                isPublic={false}
                 initialFiles={reviewImages}
                 onUploadedFilesChange={(files) => setReviewImages(files)}
             />

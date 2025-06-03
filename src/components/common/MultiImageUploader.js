@@ -43,6 +43,7 @@ export default function MultiImageUploader({
 
         const { presigned_url, file_key } = presignRes.data;
 
+        // 파일 실제 업로드
         await api.put(presigned_url, resized, {
           headers: { 'Content-Type': resized.type },
           baseURL: ''

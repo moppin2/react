@@ -1,0 +1,176 @@
+.class-detail-page {
+  max-width: 900px; /* 페이지 최대 너비 */
+  margin: 2rem auto; /* 페이지 중앙 정렬 및 상하 여백 */
+  padding: 1.5rem;
+  background-color: #f9f9f9; /* 약간의 배경색으로 구분 */
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; /* 기본 폰트 */
+  color: #333; /* 기본 글자색 */
+}
+
+.class-detail-page h1 {
+  font-size: 2rem; /* 페이지 제목 크기 */
+  color: #2c3e50; /* 제목 색상 */
+  margin-bottom: 1rem;
+  text-align: center;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 0.5rem;
+}
+
+.class-detail-page h3 {
+  font-size: 1.5rem;
+  color: #34495e;
+  margin-top: 2rem; /* 섹션 제목 위 여백 */
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 0.5rem;
+}
+
+.class-detail-page h4 {
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  margin-top: 1.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.class-detail-page p {
+  line-height: 1.6;
+  margin-bottom: 0.8rem;
+  color: #555;
+}
+
+.class-detail-page strong {
+  color: #333; /* 강조 텍스트 색상 */
+}
+
+.class-detail-page a {
+  color: #3498db; /* 링크 색상 */
+  text-decoration: none;
+}
+
+.class-detail-page a:hover {
+  text-decoration: underline;
+}
+
+/* 기본 정보 섹션 */
+.class-basic-info {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 6px;
+  margin-bottom: 2rem;
+  border: 1px solid #e0e0e0;
+}
+
+.class-basic-info p {
+  margin-bottom: 0.6rem; /* 정보 항목 간 간격 */
+}
+
+/* 학생 및 강사 액션 섹션 공통 스타일 */
+.student-actions-section,
+.instructor-actions-section {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 6px;
+  margin-top: 2rem;
+  border: 1px solid #e0e0e0;
+}
+
+.student-actions-section h3,
+.instructor-actions-section h3 {
+  margin-top: 0; /* 섹션 내부 첫 제목의 위 여백 제거 */
+}
+
+/* 버튼 스타일 */
+.class-detail-page button {
+  background-color: #3498db; /* 기본 버튼 색상 */
+  color: white;
+  border: none;
+  padding: 0.6em 1.2em;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+  margin-right: 0.5rem; /* 버튼 간 간격 */
+  margin-bottom: 0.5rem; /* 버튼 아래 간격 */
+}
+
+.class-detail-page button:hover {
+  background-color: #2980b9; /* 호버 시 약간 어둡게 */
+}
+
+.class-detail-page button:disabled {
+  background-color: #bdc3c7; /* 비활성화 시 회색 */
+  cursor: not-allowed;
+}
+
+/* 강사 메뉴의 학생 목록 스타일 */
+.instructor-actions-section ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.instructor-actions-section li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* 요소들을 양쪽으로 분산 */
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.instructor-actions-section li:last-child {
+  border-bottom: none;
+}
+
+.instructor-actions-section .user-badge {
+  margin-right: 10px; /* UserBadge와 예약 상태 사이 간격 */
+}
+
+.instructor-actions-section li span {
+  margin-right: 10px; /* 예약 상태와 버튼 사이 간격 */
+}
+
+.instructor-actions-section li div[style*="marginLeft:auto"] {
+  /* 피드백 버튼들을 오른쪽으로 밀기 위한 스타일 (기존 JSX 참고) */
+  /* 필요하다면 flex-grow: 1; 등으로 조절 가능 */
+}
+
+
+/* 반응형 처리 */
+@media (max-width: 768px) {
+  .class-detail-page {
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+  .class-detail-page h1 {
+    font-size: 1.7rem;
+  }
+
+  .class-detail-page h3 {
+    font-size: 1.3rem;
+  }
+
+  .class-basic-info,
+  .student-actions-section,
+  .instructor-actions-section {
+    padding: 1rem;
+  }
+
+  .instructor-actions-section li {
+    flex-direction: column; /* 모바일에서는 학생 정보와 버튼을 세로로 */
+    align-items: flex-start;
+  }
+  .instructor-actions-section li div[style*="marginLeft:auto"] {
+    margin-left: 0 !important; /* 강제로 왼쪽 정렬 */
+    margin-top: 0.5rem; /* 위 요소와의 간격 */
+    width: 100%; /* 버튼 영역 너비 전체 사용 */
+  }
+  .instructor-actions-section li div[style*="marginLeft:auto"] button {
+    width: 100%; /* 버튼 너비 전체 */
+    margin-bottom: 0.3rem;
+  }
+  .instructor-actions-section li div[style*="marginLeft:auto"] button:last-child {
+    margin-bottom: 0;
+  }
+}

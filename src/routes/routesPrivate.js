@@ -6,6 +6,7 @@ import CourseEdit from "../pages/courses/edit";
 import EnrollmentApprovePage from "../pages/courses/enrollmentApprove";
 //수업관련
 import ClassManage from "../pages/classes/manage";
+import ClassDetail from "../pages/classes/detail";
 import ClassCreate from "../pages/classes/create";
 import FeedbackCreate from "../pages/classes/feedback/create";
 import FeedbackEdit from "../pages/classes/feedback/edit";
@@ -24,10 +25,11 @@ const privateRoutes = [
   { path: "/course/edit/:id", element: <PrivateRoute allowedRoles={['instructor']} allowedStatus={['approved']}><CourseEdit /></PrivateRoute> },
   { path: "/course/enrollment/approve/:courseId?", element: <PrivateRoute allowedRoles={['instructor']} allowedStatus={['approved']}><EnrollmentApprovePage /></PrivateRoute> },
   { path: "/class/manage", element: <PrivateRoute allowedRoles={['instructor', 'user']} allowedStatus={['approved']}><ClassManage /></PrivateRoute> },
+  { path: "/class/:classId", element: <PrivateRoute allowedRoles={['instructor', 'user']} allowedStatus={['approved']}><ClassDetail /></PrivateRoute> },  
+  { path: "/class/create", element: <PrivateRoute allowedRoles={['instructor']} allowedStatus={['approved']}><ClassCreate /></PrivateRoute> },
   { path: "/class/:classId/feedback/:studentId", element: <PrivateRoute allowedRoles={['instructor']} allowedStatus={['approved']}><FeedbackCreate /></PrivateRoute> },
   { path: "/feedback/edit/:feedbackId", element: <PrivateRoute allowedRoles={['instructor']} allowedStatus={['approved']}><FeedbackEdit /></PrivateRoute> },
   { path: "/review/write/:classId", element: <PrivateRoute allowedRoles={['user']}><WriteReview /></PrivateRoute> },
-  { path: "/class/create", element: <PrivateRoute allowedRoles={['instructor']} allowedStatus={['approved']}><ClassCreate /></PrivateRoute> },
   { path: "/student/manage", element: <PrivateRoute allowedRoles={['instructor']} allowedStatus={['approved']}><StudentManage /></PrivateRoute> },
   { path: "/instructor/verify/:id?", element: <PrivateRoute allowedRoles={['instructor','admin']}><InstructorVerify /></PrivateRoute> },  // 강사인증 첨부파일메뉴
 

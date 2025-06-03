@@ -30,8 +30,6 @@ export default function EditFeedbackPage() {
         // studentProgress
     } = useCourseProgress(currentCourseId, currentStudentIdForHook);
 
-    console.log('criteriaDataForForm: ', criteriaDataForForm)
-
     // 기존 피드백 데이터 및 관련 정보를 불러오는 함수
     const loadFeedbackForEdit = useCallback(async () => {
         setPageLoading(true);
@@ -42,6 +40,7 @@ export default function EditFeedbackPage() {
         try {
             const feedbackRes = await api.get(`/api/class-feedbacks/${feedbackId}`);
             const feedbackData = feedbackRes.data; 
+            console.log(feedbackData);
             // feedbackData.class_id
 
             if (!feedbackData) {

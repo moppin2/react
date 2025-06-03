@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
-import ClassSection from '../components/ClassSection';
+import ClassList from '../components/ClassList';
 import api from '../../../services/api';
 
 function ClassManage() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, loading:userLoading } = useAuth();
   const [myClasses, setMyClasses] = useState([]);
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
 
@@ -24,7 +24,6 @@ function ClassManage() {
         setIsLoading(false);
       }
     } else {
-      console.log('user 없음');
       setMyClasses([]); // user 정보가 없으면 목록 비우기
     }
   }, [user]);
@@ -39,7 +38,7 @@ function ClassManage() {
     navigate('/class/create');
   };
 
-  if (isLoading && myClasses.length === 0) { // 초기 로딩 중이거나 user 정보 기다리는 중
+  if ((isLoading || userLoading) && myClasses.length === 0) { // 초기 로딩 중이거나 user 정보 기다리는 중
     return <p>수업 목록을 불러오는 중...</p>;
   }
 
@@ -52,12 +51,10 @@ function ClassManage() {
         }
 
       </div>
-      {<ClassSection
-        title={`${user.username} 강사님 수업 리스트`}
+      <ClassList
         classes={myClasses}
-        type={user?.userType || 'user'}
         refreshMyClasses={loadMyClasses}
-      />}
+      />
     </div>
   );
 }
