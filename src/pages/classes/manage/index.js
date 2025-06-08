@@ -32,8 +32,6 @@ function ClassManage() {
     loadMyClasses();
   }, [loadMyClasses]); // loadMyClasses 함수 자체가 의존성
 
-  console.log(myClasses);
-
   const handleCreateClass = () => {
     navigate('/class/create');
   };

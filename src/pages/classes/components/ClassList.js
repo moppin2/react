@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ClassList.css'; // 여기에 .class-title { cursor: pointer; } 및 .toggle-icon 스타일 추가 권장
 import UserBadge from '../../../components/common/UserBadge';
 import StatusBadge from '../../../components/common/StatusBadge';
@@ -7,6 +7,7 @@ import FeedbackStatusBadge from './FeedbackStatusBadge';
 import ReviewStatusBadge from './ReviewStatusBadge';
 import ReservationStatusBadge from './ReservationStatusBadge';
 import { useNavigate } from 'react-router-dom';
+import api from '../../../services/api'; // API 호출을 위해 추가
 
 // 상태 키와 화면에 보여줄 레이블 매핑
 const STATUS_LABEL = {
@@ -19,11 +20,13 @@ const STATUS_LABEL = {
 
 export default function ClassList({ classes = [], refreshMyClasses, showDetail = false }) {
     const { user, loading: authLoading } = useAuth();
-    const navigate = useNavigate(); // 상세 페이지 이동이 필요하다면 다른 방식으로 호출
+    const navigate = useNavigate();
 
     // 각 클래스의 상세 정보 확장 여부를 관리하는 상태
     // { classId1: true, classId2: false, ... }
     const [expandedClasses, setExpandedClasses] = useState({});
+    const [loadingRoom, setLoadingRoom] = useState({}); // 개별 로딩 상태
+    const [errorRoom, setErrorRoom] = useState(null);
 
     // showDetail prop이나 classes 목록이 변경되면 expandedClasses 상태를 초기화/업데이트합니다.
     useEffect(() => {
@@ -43,6 +46,22 @@ export default function ClassList({ classes = [], refreshMyClasses, showDetail =
         }));
     };
 
+    const handleGoToChatRoom = async (classIdToChat) => {
+        if (!user) return;
+        setLoadingRoom(prev => ({ ...prev, [classIdToChat]: true }));
+        try {
+            // 권한 체크 및 채팅방 ID 가져오는 API 호출
+            const response = await api.get(`/api/chat/class/${classIdToChat}`);
+            const { roomId } = response.data; 
+            navigate(`/chat/room/${roomId}`);
+        } catch (err) {
+            console.error('채팅방 진입 실패:', err);
+            setErrorRoom(err.response?.data?.message || '채팅방 진입 중 오류가 발생했습니다.');
+        } finally {
+            setLoadingRoom(prev => ({ ...prev, [classIdToChat]: false }));
+        }
+    };
+
     if (authLoading) return <div>Loading...</div>;
     if (!Array.isArray(classes) || classes.length === 0) {
         return <p>표시할 과정이 없습니다.</p>;
@@ -50,6 +69,7 @@ export default function ClassList({ classes = [], refreshMyClasses, showDetail =
 
     return (
         <div className="class-list">
+            {errorRoom && <p className="error-message">{errorRoom}</p>}
             {classes.map((cls) => (
                 <div key={cls.id} className="class-card">
 
@@ -96,6 +116,18 @@ export default function ClassList({ classes = [], refreshMyClasses, showDetail =
                                 classId={cls.id}
                                 studentId={user.id} // 학생 본인의 리뷰만 해당
                             />)}
+
+
+                        {/* --- 채팅 아이콘 버튼 추가 --- */}
+                        <button
+                            onClick={() => handleGoToChatRoom(cls.id)}
+                            className="chat-icon-button"
+                            title={`${cls.title} 채팅방으로 이동`}
+                            disabled={loadingRoom[cls.id]}
+                        >
+                            {loadingRoom[cls.id] ? '...' : '💬'}
+                        </button>
+                        {/* --- 채팅 아이콘 버튼 끝 --- */}
                     </div>
 
                     {/* 수업 일시 */}

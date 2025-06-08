@@ -40,8 +40,6 @@ export default function EditFeedbackPage() {
         try {
             const feedbackRes = await api.get(`/api/class-feedbacks/${feedbackId}`);
             const feedbackData = feedbackRes.data; 
-            console.log(feedbackData);
-            // feedbackData.class_id
 
             if (!feedbackData) {
                 throw new Error('피드백 정보를 찾을 수 없습니다.');
