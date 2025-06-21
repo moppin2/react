@@ -41,7 +41,7 @@ function ClassManage() {
   }
 
   return (
-    <div className='class-manage'>
+    <div className='class-manage content-basic'>
       <div className="function-area">
         {
           (user.userType === 'instructor') &&

@@ -114,7 +114,7 @@ export default function WriteReviewPage() {
     if (!classInfo || !initialFormValues) return <p>수업 정보를 불러오지 못했거나 폼 초기화에 실패했습니다.</p>;
 
     return (
-        <div className="write-review-page"> {/* CSS 클래스명은 실제 파일과 일치 */}
+        <div className="write-review-page content-basic"> {/* CSS 클래스명은 실제 파일과 일치 */}
             <h1>{classInfo.title || `수업 (ID: ${classId})`}</h1>
             <h2>후기 {existingReview ? '수정' : '작성'}</h2>
             <p>작성자: {user?.username || '학생'}</p>

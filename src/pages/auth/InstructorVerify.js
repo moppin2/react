@@ -205,7 +205,7 @@ export default function InstructorVeryfy() {
   };
 
   return (
-    <div>
+    <div className="content-basic">
       <h3>{targetInstructor?.username}님의 가입신청 문서</h3>
 
       {isEditable && (

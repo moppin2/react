@@ -1,23 +1,32 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import "./Login.css";
+import {
+  Container,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
+  Paper,
+  useTheme,
+} from '@mui/material';
 
-function Login() {  
+export default function Login() {
+  const theme = useTheme();
   const [userType, setUserType] = useState('user');
   const [email, setEmail] = useState("test@test.com");
-  const [password, setPassword] = useState("Wkdrndi!1"); //짱구야!1
-  
-  const { login } = useAuth()
-  const navigate = useNavigate()
-  const location = useLocation()
-  
-  // PrivateRoute가 넣어둔 원래 경로 (없으면 '/')
-  const from = location.state?.from?.pathname || '/'  
+  const [password, setPassword] = useState("Wkdrndi!1");
 
-  const handleTypeChange = (e) => {
-    setUserType(e.target.value);
-  };
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || '/';
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -25,66 +34,141 @@ function Login() {
       alert("이메일과 비밀번호를 입력해주세요.");
       return;
     }
-    
+
     try {
-      await login({ userType, email, password })
-      // 로그인 성공하면 원래 경로로 이동
-      navigate(from, { replace: true })
+      await login({ userType, email, password });
+      navigate(from, { replace: true });
     } catch (err) {
       console.error(err);
       alert(err.message);
     }
   };
 
-    return (
-      <div>
-        <form className="login-form" onSubmit={handleLogin}>
-          <h4>로그인</h4>
-          
-          <div className="user-type">
-            <label>
-              <input
-                type="radio"
-                name="userType"
-                value="user"
-                checked={userType === 'user'}
-                onChange={handleTypeChange}
-              /> 일반회원
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="userType"
-                value="instructor"
-                checked={userType === 'instructor'}
-                onChange={handleTypeChange}
-              /> 강사회원
-            </label>
-          </div>
+  return (
+    <Box
+      sx={{
+        minHeight: '100vh',
+        backgroundColor: theme.palette.background.default,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        p: theme.spacing(2),
+      }}
+    >
+      <Container maxWidth="xs">
+        <Paper
+          elevation={5}
+          sx={{
+            p: 4,
+            backgroundColor: theme.palette.background.paper,
+            color: theme.palette.text.primary,
+            borderRadius: theme.shape.borderRadius,
+          }}
+        >
+          <Typography
+            variant="h5"
+            gutterBottom
+            sx={{
+              color: theme.palette.primary.main,
+              fontWeight: 'bold',
+              textAlign: 'center',
+            }}
+          >
+            로그인
+          </Typography>
 
-          <div className="form-group">
-            {/* <label>이메일</label> */}
-            <input
+          <Box component="form" onSubmit={handleLogin}>
+            <FormControl component="fieldset" sx={{ mb: 3, width: '100%' }}>
+              <FormLabel
+                component="legend"
+                sx={{ color: theme.palette.text.primary, fontSize: '0.9rem', mb: 1 }}
+              >
+                회원 유형
+              </FormLabel>
+              <RadioGroup
+                row
+                name="userType"
+                value={userType}
+                onChange={(e) => setUserType(e.target.value)}
+                sx={{ justifyContent: 'center' }}
+              >
+                <FormControlLabel
+                  value="user"
+                  control={
+                    <Radio
+                      sx={{
+                        color: theme.palette.primary.main,
+                        '&.Mui-checked': { color: theme.palette.primary.main },
+                      }}
+                    />
+                  }
+                  label={
+                    <Typography sx={{ color: theme.palette.text.primary }}>
+                      일반회원
+                    </Typography>
+                  }
+                />
+                <FormControlLabel
+                  value="instructor"
+                  control={
+                    <Radio
+                      sx={{
+                        color: theme.palette.primary.main,
+                        '&.Mui-checked': { color: theme.palette.primary.main },
+                      }}
+                    />
+                  }
+                  label={
+                    <Typography sx={{ color: theme.palette.text.primary }}>
+                      강사회원
+                    </Typography>
+                  }
+                />
+              </RadioGroup>
+            </FormControl>
+
+            <TextField
+              fullWidth
               type="email"
               placeholder="이메일을 입력하세요"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              sx={{
+                mb: 2,
+                input: { color: theme.palette.text.primary },
+                backgroundColor: theme.palette.action.selected,
+                borderRadius: 1,
+              }}
             />
-          </div>
-          <div className="form-group">
-            {/* <label>비밀번호</label> */}
-            <input
+            <TextField
+              fullWidth
               type="password"
               placeholder="비밀번호를 입력하세요"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              sx={{
+                mb: 3,
+                input: { color: theme.palette.text.primary },
+                backgroundColor: theme.palette.action.selected,
+                borderRadius: 1,
+              }}
             />
-          </div>
-          <button type="submit">로그인</button>
-        </form>
-      </div> 
-    );
-  }
-  
-  export default Login;
-  
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.primary.contrastText,
+                fontWeight: 'bold',
+                '&:hover': { backgroundColor: theme.palette.primary.dark },
+              }}
+            >
+              로그인
+            </Button>
+          </Box>
+        </Paper>
+      </Container>
+    </Box>
+  );
+}

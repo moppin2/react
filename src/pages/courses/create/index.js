@@ -30,7 +30,7 @@ function CourseCreatePage() {
   };
   
   return (
-    <div>
+    <div className="content-basic">
       {/* <h1>과정 생성</h1> */}
       <CourseForm onSubmit={handleCreateCourse} loading={loading} />
     </div>

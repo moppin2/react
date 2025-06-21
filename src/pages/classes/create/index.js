@@ -27,7 +27,7 @@ function ClassCreatePage() {
   };
   
   return (
-    <div>
+    <div className="content-basic">
       {/* <h1>수업 생성</h1> */}
       <ClassForm onSubmit={handleCreateClass} loading={loading} />
     </div>

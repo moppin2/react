@@ -15,14 +15,8 @@
   align-items: center;
   justify-content: space-between;
   background-color: #FFFFFF;
-  padding: 0.5rem 1rem;
+  padding: 0 1rem;
   border-bottom: 1px solid #E0E0E0;
-}
-
-/* Ensure content below navbar isn't hidden */
-body {
-  padding-top: 3.5rem;
-  /* Adjust based on navbar height (0.5rem+line-height) */
 }
 
 /* Brand logo */
@@ -116,8 +110,12 @@ body {
   color: #da3d3d;
 }
 
-.navbar+div {
-  padding: 0 1rem;
+.content-basic {
+  padding: 46px 1rem 66px 1rem;
+}
+
+.content-full {
+  padding: 46px 1rem 66px 1rem;
 }
 
 @media (max-width: 768px) {
@@ -131,6 +129,7 @@ body {
     transform: none !important;
     left: 0 !important;
     width: 100% !important;
+    padding: 0.5rem 1rem;
   }
 
   /* 2) 모바일에선 .nav만 화면 하단에 고정 */
@@ -143,10 +142,12 @@ body {
     background: #fff;
     border-top: 1px solid #e0e0e0;
     justify-content: space-around;
-    padding: 1rem 0.5rem;
+    /* padding: 1rem 0.5rem; */
     z-index: 1001;
     justify-content: center;
     gap: 0.5rem;
     font-size: 0.95rem;
+
+    /* padding-bottom: calc(1rem + env(safe-area-inset-bottom)); */
   }
 }

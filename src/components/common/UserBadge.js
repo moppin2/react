@@ -1,122 +1,159 @@
-// src/components/common/UserBadge.jsx
-import React, { useState, useRef } from 'react';
-import './UserBadge.css';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import {
+  Box,
+  Avatar,
+  Typography,
+  Chip,
+  IconButton,
+  Menu,
+  MenuItem,
+  Divider,
+  useTheme,
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import ActionPopoverMenu from './ActionPopoverMenu';
-
 
 const getUserLabel = (userType) => {
-    switch (userType) {
-        case 'admin':
-            return '관리자';
-        case 'instructor':
-            return '강사';
-        default:
-            return '일반';
-    }
+  switch (userType) {
+    case 'admin':      return '관리자';
+    case 'instructor': return '강사';
+    default:           return '일반';
+  }
 };
 
 export default function UserBadge({
-    user,
-    avatarUrl,
-    showUserType = true,
-    onSendMessage
+  user,
+  avatarUrl,
+  showUserType = true,
+  onSendMessage,
 }) {
-    const { user: loggedInUser, logout } = useAuth();
-    const navigate = useNavigate();
+  const { user: loggedInUser, logout } = useAuth();
+  const navigate = useNavigate();
+  const theme = useTheme();
 
-    const [menuAnchorEl, setMenuAnchorEl] = useState(null); // 팝오버 메뉴의 기준점 (DOM 요소)
-    const badgeRef = useRef(null); // UserBadge의 최상위 div를 참조할 ref
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
 
-    const isMenuOpen = Boolean(menuAnchorEl);
+  const handleOpen = (e) => {
+    if (!user || !user.id) return;
+    setAnchorEl(e.currentTarget);
+  };
+  const handleClose = () => setAnchorEl(null);
 
-    const generateMenuItems = () => { /* ... (이전과 동일한 메뉴 아이템 생성 로직) ... */
-        const items = [];
-        if (!user || !user.id) return items;
-        const displayName = user.name || user.username || '사용자';
-        const isCurrentUser = loggedInUser && loggedInUser.id === user.id && loggedInUser.userType === user.userType;
-
-        if (isCurrentUser) {
-            items.push({ label: '내 프로필 보기', action: () => navigate(`/profile/${user.userType}/${user.id}`) });
-            items.push({ label: '프로필 수정', action: () => navigate(`/profile/edit`) });
-            items.push({ isSeparator: true });
-            items.push({
-                label: '로그아웃',
-                action: async () => { if (logout) await logout(); navigate('/'); }
-            });
-        } else if (loggedInUser) {
-            items.push({ label: `${displayName} 프로필 보기`, action: () => navigate(`/profile/${user.userType}/${user.id}`) });
-            if (onSendMessage) {
-                items.push({ label: `${displayName}에게 쪽지 보내기`, action: () => onSendMessage(user) });
-            }
-        } else {
-            items.push({ label: `${displayName} 프로필 보기`, action: () => navigate(`/profile/${user.userType}/${user.id}`) });
-        }
-        return items;
-    };
-
-    const currentMenuItems = generateMenuItems();
-
-    const handleBadgeClick = (event) => {
-        if (currentMenuItems.length === 0) return;
-
-        // badgeRef.current가 클릭된 요소(event.currentTarget)와 같은지 확인하여 토글
-        if (menuAnchorEl === badgeRef.current && isMenuOpen) {
-            setMenuAnchorEl(null);
-        } else {
-            setMenuAnchorEl(badgeRef.current); // ref의 현재 DOM 요소를 앵커로 설정
-        }
-    };
-
-    const handleCloseMenu = () => {
-        setMenuAnchorEl(null);
-    };
-
-    if (!user || !user.id) return null;
-
-    const label = getUserLabel(user.userType);
+  // 메뉴 아이템 생성 로직 (원본과 동일)
+  const generateMenuItems = () => {
+    const items = [];
+    if (!user || !user.id) return items;
     const displayName = user.name || user.username || '사용자';
-    const initial = displayName ? displayName[0].toUpperCase() : '';
+    const isMe = loggedInUser?.id === user.id && loggedInUser.userType === user.userType;
 
-    return (
-        <>
-            <div
-                ref={badgeRef} // <<--- 여기에 ref 연결
-                className={`user-badge ${currentMenuItems.length > 0 ? 'clickable' : ''}`}
-                onClick={currentMenuItems.length > 0 ? handleBadgeClick : undefined}
-                style={currentMenuItems.length > 0 ? { cursor: 'pointer' } : {}}
-                aria-haspopup={currentMenuItems.length > 0 ? "true" : undefined}
-                aria-expanded={isMenuOpen}
-                tabIndex={currentMenuItems.length > 0 ? 0 : undefined}
-                onKeyDown={(e) => {
-                    if (currentMenuItems.length > 0 && (e.key === 'Enter' || e.key === ' ')) {
-                        e.preventDefault();
-                        handleBadgeClick(e); // 이벤트 객체 전달 (currentTarget 사용 위해)
-                    }
-                }}
-                role={currentMenuItems.length > 0 ? "button" : undefined}
-            >
-                {avatarUrl ? (
-                    <img className="user-badge__avatar" src={avatarUrl} alt={`${displayName} 프로필`} />
-                ) : (
-                    <span className="user-badge__avatar placeholder">{initial}</span>
-                )}
-                <span className="user-badge__name">{displayName}</span>
-                {showUserType && user.userType && (
-                    <span className={`user-badge__label user-badge__label--${user.userType}`}>{label}</span>
-                )}
-            </div>
+    if (isMe) {
+      items.push({ label: '내 프로필 보기',      action: () => navigate(`/profile/${user.userType}/${user.id}`) });
+      items.push({ label: '프로필 수정',          action: () => navigate(`/profile/edit`) });
+      items.push({ isSeparator: true });
+      items.push({
+        label: '로그아웃',
+        action: async () => {
+          if (logout) await logout();
+          navigate('/');
+        },
+      });
+    } else if (loggedInUser) {
+      items.push({ label: `${displayName} 프로필 보기`, action: () => navigate(`/profile/${user.userType}/${user.id}`) });
+      if (onSendMessage) {
+        items.push({ label: `${displayName}에게 쪽지 보내기`, action: () => onSendMessage(user) });
+      }
+    } else {
+      items.push({ label: `${displayName} 프로필 보기`, action: () => navigate(`/profile/${user.userType}/${user.id}`) });
+    }
 
-            {currentMenuItems.length > 0 && (
-                <ActionPopoverMenu
-                    anchorElement={menuAnchorEl} // <<--- 상태로 관리되는 DOM 요소 전달
-                    isOpen={isMenuOpen}
-                    onClose={handleCloseMenu}
-                    menuItems={currentMenuItems}
-                    placement="bottom-start"
-                />
+    return items;
+  };
+
+  const menuItems = generateMenuItems();
+
+  if (!user || !user.id) return null;
+
+  const displayName = user.name || user.username || '사용자';
+  const initial = displayName[0].toUpperCase();
+  const label = getUserLabel(user.userType);
+
+  return (
+    <>
+      <Box
+        display="inline-flex"
+        alignItems="center"
+      >
+        <IconButton
+          onClick={handleOpen}
+          size="small"
+          sx={{
+            p: 0,
+            '&:hover': { backgroundColor: theme.palette.action.hover },
+          }}
+          aria-controls={open ? 'user-badge-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+        >
+          {avatarUrl
+            ? <Avatar src={avatarUrl} alt={displayName} sx={{ width: 32, height: 32 }} />
+            : <Avatar sx={{ width: 32, height: 32 }}>{initial}</Avatar>
+          }
+          <Box ml={1} textAlign="left">
+            <Typography variant="body2" component="span">
+              {displayName}
+            </Typography>
+            {showUserType && (
+              <Chip
+                label={label}
+                size="small"
+                sx={{ ml: 0.5, height: 20, fontSize: '0.65rem' }}
+                color={
+                  user.userType === 'admin' ? 'error'
+                  : user.userType === 'instructor' ? 'primary'
+                  : 'default'
+                }
+              />
             )}
-        </>
-    );
+          </Box>
+        </IconButton>
+      </Box>
+
+      <Menu
+        id="user-badge-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+        PaperProps={{ elevation: 3, sx: { mt: 1 } }}
+      >
+        {menuItems.map((item, idx) => (
+          item.isSeparator
+            ? <Divider key={`div-${idx}`} />
+            : (
+              <MenuItem
+                key={item.label + idx}
+                onClick={() => { item.action(); handleClose(); }}
+              >
+                {item.label}
+              </MenuItem>
+            )
+        ))}
+      </Menu>
+    </>
+  );
 }
+
+UserBadge.propTypes = {
+  user: PropTypes.shape({
+    id:       PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    name:     PropTypes.string,
+    username: PropTypes.string,
+    userType: PropTypes.string,
+  }).isRequired,
+  avatarUrl:    PropTypes.string,
+  showUserType: PropTypes.bool,
+  onSendMessage: PropTypes.func,
+};

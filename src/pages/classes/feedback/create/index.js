@@ -114,7 +114,7 @@ export default function CreateClassFeedbackPage() {
     if (!student) return <p>학생 정보를 찾을 수 없습니다.</p>; // 로딩 완료 후에도 학생 정보가 없을 경우    
 
     return (
-        <div className="manage-feedback-page">
+        <div className="manage-feedback-page content-basic">
             <h2>{`피드백 작성 (학생: ${student.name})`}</h2>
             <p>수업 ID: {classId}</p>
 

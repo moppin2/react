@@ -51,7 +51,7 @@ function CourseEdit() {
   };
 
   return (
-    <div className="course-edit-container">
+    <div className="course-edit-container content-basic">
       {/* <h1 className="course-edit-title">과정 수정</h1> */}
       {initialValues ? (
         <CourseForm

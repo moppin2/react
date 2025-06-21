@@ -137,7 +137,7 @@ export default function EditFeedbackPage() {
     if (!initialFormValues) return <p>피드백을 찾을 수 없거나 현재 수정할 수 없는 상태입니다.</p>;
 
     return (
-        <div className="edit-feedback-page-container">
+        <div className="edit-feedback-page-container content-basic">
             <FeedbackForm
                 initialValues={initialFormValues}
                 initialCriteriaData={criteriaDataForForm} // 커스텀 훅에서 가져온 가공된 데이터 전달

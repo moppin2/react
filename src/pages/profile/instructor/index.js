@@ -16,7 +16,7 @@ export default function InstructorProfile() {
     const owner = user?.userType === 'instructor' && user?.id === Number(id);
 
     return (
-        <div>
+        <div className="content-basic">
             <ProfileHeader
                 name={profileUser.name}
                 avatarUrl={profileUser.avatarUrl}

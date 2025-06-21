@@ -89,7 +89,7 @@ export default function Register() {
   };
 
   return (
-    <div className="register-container">
+    <div className="register-container content-basic">
       <h4>회원가입</h4>
       <div className="user-type">
         <label>
